@@ -41,6 +41,29 @@ export default class AppComponent extends Vue {
 </script>
 
 <style lang="scss">
+$justifyContents: space-around, flex-start, space-between, flex-end,
+    space-evenly;
+
+@mixin flexRowMixin() {
+    @each $justify in $justifyContents {
+        .r-#{$justify} {
+            display: flex;
+            flex-direction: row;
+            justify-content: $justify;
+            align-items: flex-start;
+        }
+    }
+    @each $justify in $justifyContents {
+        .c-#{$justify} {
+            display: flex;
+            flex-direction: column;
+            justify-content: $justify;
+            align-items: flex-start;
+        }
+    }
+}
+@include flexRowMixin();
+
 #app {
     font-family: Avenir, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
