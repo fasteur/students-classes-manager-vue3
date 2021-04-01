@@ -1,18 +1,26 @@
 <template>
     <div>
-        <div class="r-space-around" v-for="user in userList" :key="user.id">
-            <span>{{ user.name }}</span>
-            <span>{{ user.age }}</span>
-
-            <div>
-                <button type="button" @click="editUserChanges(user)">
-                    {{ $t('GENERAL.EDIT') }}
-                </button>
-                <button type="button" @click="deleteUserChanges(user)">
-                    {{ $t('GENERAL.DELETE') }}
-                </button>
-            </div>
-        </div>
+        <el-table :data="userList" style="width: 100%">
+            <el-table-column label="Name" prop="name"></el-table-column>
+            <el-table-column label="Age" prop="age"></el-table-column>
+            <el-table-column align="right">
+                <template #header></template>
+                <template #default="scope">
+                    <el-button
+                        @click="editUserChanges(scope.row)"
+                        type="primary"
+                        icon="el-icon-edit"
+                        circle
+                    ></el-button>
+                    <el-button
+                        @click="deleteUserChanges(scope.row)"
+                        type="danger"
+                        icon="el-icon-delete"
+                        circle
+                    ></el-button>
+                </template>
+            </el-table-column>
+        </el-table>
     </div>
 </template>
 
@@ -21,7 +29,6 @@ export default {
     props: ['title', 'userList'],
     emits: ['editUserChanges', 'deleteUserChanges'],
     setup(_, { emit }) {
-
         function editUserChanges(user) {
             emit('editUserChanges', user)
         }

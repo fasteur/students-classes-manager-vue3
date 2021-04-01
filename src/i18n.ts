@@ -1,4 +1,6 @@
 import { createI18n, LocaleMessages, VueMessageType } from 'vue-i18n'
+import enLocale from 'element-plus/lib/locale/lang/en'
+import frLocale from 'element-plus/lib/locale/lang/fr'
 
 /**
  * Load locale messages
@@ -7,6 +9,7 @@ import { createI18n, LocaleMessages, VueMessageType } from 'vue-i18n'
  * See: https://github.com/intlify/vue-i18n-loader#rocket-i18n-resource-pre-compilation
  */
 function loadLocaleMessages(): LocaleMessages<VueMessageType> {
+
     const locales = require.context(
         './locales',
         true,
@@ -20,6 +23,8 @@ function loadLocaleMessages(): LocaleMessages<VueMessageType> {
             messages[locale] = locales(key).default
         }
     })
+    messages[enLocale.name] = { ...messages[enLocale.name], el: enLocale.el }
+    messages[frLocale.name] = { ...messages[frLocale.name], el: frLocale.el }
     return messages
 }
 

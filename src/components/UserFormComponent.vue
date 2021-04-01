@@ -28,7 +28,7 @@
                             {{ $t('GENERAL.SUBMIT') }}
                         </button>
                         <button type="button" @click="resetForm()">
-                            {{ $t('GENERAL.CLEAR') }}
+                            {{ $t('GENERAL.RESET') }}
                         </button>
                     </div>
                 </div>
