@@ -1,0 +1,50 @@
+
+// ------ VARIABLES ------
+
+$primaryColor: #409eff;
+
+$layout: (
+    width: 100%,
+    full-width: 160rem,
+    max-width: 120rem,
+    spacing: 2rem,
+    border-radius: 0.6rem,
+    border: 1px solid darken(white, 20%),
+) !global;
+
+$justifyContents: space-around, flex-start, space-between, flex-end,
+    space-evenly;
+
+// ------ FUNCTIONS ------
+
+@function l($value) {
+    @return map-get($layout, $value);
+}
+
+// ------ MIXINS ------
+
+@mixin container($max: 100%) {
+    width: 100%;
+    max-width: $max;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+@mixin flexRowMixin() {
+    @each $justify in $justifyContents {
+        .r-#{$justify} {
+            display: flex;
+            flex-direction: row;
+            justify-content: $justify;
+            align-items: flex-start;
+        }
+    }
+    @each $justify in $justifyContents {
+        .c-#{$justify} {
+            display: flex;
+            flex-direction: column;
+            justify-content: $justify;
+            align-items: flex-start;
+        }
+    }
+}

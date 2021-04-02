@@ -1,10 +1,12 @@
 {
   "APP": {
     "NAV": {
+      "ABOUT": "About",
       "HOME": "Home",
       "LANG": {
         "EN": "EN",
-        "FR": "FR"
+        "FR": "FR",
+        "TITLE": "Language"
       }
     }
   },

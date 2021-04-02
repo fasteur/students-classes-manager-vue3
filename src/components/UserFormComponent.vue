@@ -1,6 +1,5 @@
 <template>
     <div>
-
         <h3>{{ $t(title) }}</h3>
         <form @submit.prevent="submitForm()">
 
@@ -74,7 +73,8 @@ export default {
             }
             emit('resetFormChange')
         }
-        const errors = computed(function () {
+        
+        const errors = computed(() => {
             const errors = []
 
             if (!form.value.name) {
@@ -89,9 +89,7 @@ export default {
             return errors
         })
 
-        const formIsValid = computed(function () {
-            return !(errors.value.length > 0)
-        })
+        const formIsValid = computed(() => !(errors.value.length > 0))
 
         function submitForm() {
             if (formIsValid.value) {

@@ -6,6 +6,7 @@ import store from "./store";
 import i18n from "./i18n";
 import ElementPlus from 'element-plus';
 import 'element-plus/lib/theme-chalk/index.css';
+import '@/assets/style.scss';
 
 import { userService} from '@/services/user.service';
 
@@ -18,4 +19,3 @@ createApp(App)
       })
     .provide('userService', userService)
     .mount("#app");
-

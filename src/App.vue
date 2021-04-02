@@ -1,67 +1,79 @@
 <template>
-    <div>
-        <div id="app">
-            <div>
-                <div id="nav">
-                    <div>
-                        <div>
-                            <router-link to="/">{{
-                                $t('APP.NAV.HOME')
-                            }}</router-link>
-                            <router-link to="/about">About</router-link>
-                        </div>
-                        <div>
-                            <button @click="activeLanguage('fr')">
-                                {{ $t('APP.NAV.LANG.FR') }}
-                            </button>
-                            <button @click="activeLanguage('en')">
-                                {{ $t('APP.NAV.LANG.EN') }}
-                            </button>
-                        </div>
-                    </div>
-                </div>
+    <div class="container__wrapper">
+        <div class="container__inner">
+            <el-container id="app">
+                <el-header id="nav">
+                    <el-menu
+                        :default-active="activeIndex"
+                        class="el-menu-demo r-flex-start"
+                        mode="horizontal"
+                        @select="handleSelect"
+                    >
+                        <el-menu-item index="1">
+                            <router-link to="/">{{ $t('APP.NAV.HOME') }}</router-link>
+                        </el-menu-item>
+                        <el-menu-item index="2">
+                            <router-link to="/about">{{ $t('APP.NAV.ABOUT') }}</router-link>
+                        </el-menu-item>
+                        <li class="align-self-right lang-dropdown">
+                            <el-dropdown class="lang-dropdown__text">
+                                <span class="el-dropdown-link">
+                                    {{ $t('APP.NAV.LANG.TITLE') }} <i class="el-icon-arrow-down el-icon--right"></i>
+                                </span>
+                                <template #dropdown>
+                                    <el-dropdown-menu>
+                                        <el-dropdown-item @click="activeLanguage('fr')">
+                                            {{ $t('APP.NAV.LANG.FR') }}
+                                        </el-dropdown-item>
+                                        <el-dropdown-item @click="activeLanguage('en')">
+                                            {{ $t('APP.NAV.LANG.EN') }}
+                                        </el-dropdown-item>
+                                    </el-dropdown-menu>
+                                </template>
+                            </el-dropdown>
+                        </li>
+                    </el-menu>
+                </el-header>
 
-                <div>
+                <el-main>
                     <router-view />
-                </div>
-            </div>
+                </el-main>
+            </el-container>
         </div>
     </div>
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component'
+import { ref } from 'vue'
+import i18n from '@/i18n'
 
-@Options({})
-export default class AppComponent extends Vue {
-    public activeLanguage(lang: string) {
-        this.$i18n.locale = lang
-    }
+export default {
+    props: [],
+    setup() {
+        let activeIndex = ref('1')
+
+        function activeLanguage(lang: string) {
+            i18n.global.locale = lang
+        }
+
+        function handleSelect(_: string, keyPath: string[]) {
+            if (keyPath[0] !== '3') {
+                activeIndex.value = keyPath[0]
+            }
+        }
+
+        return {
+            activeLanguage,
+            activeIndex,
+            handleSelect,
+        }
+    },
 }
 </script>
 
 <style lang="scss">
-$justifyContents: space-around, flex-start, space-between, flex-end,
-    space-evenly;
+@import '@/assets/style.scss';
 
-@mixin flexRowMixin() {
-    @each $justify in $justifyContents {
-        .r-#{$justify} {
-            display: flex;
-            flex-direction: row;
-            justify-content: $justify;
-            align-items: flex-start;
-        }
-    }
-    @each $justify in $justifyContents {
-        .c-#{$justify} {
-            display: flex;
-            flex-direction: column;
-            justify-content: $justify;
-            align-items: flex-start;
-        }
-    }
-}
 @include flexRowMixin();
 
 #app {
@@ -80,8 +92,32 @@ $justifyContents: space-around, flex-start, space-between, flex-end,
         color: #2c3e50;
 
         &.router-link-exact-active {
-            color: #42b983;
+            color: $primaryColor;
         }
     }
+}
+
+.container {
+    &__wrapper {
+        @include container(l('full-width'));
+    }
+    &__inner {
+        @include container(l('max-width')/2);
+    }
+}
+
+.lang-dropdown {
+    height: 60px;
+    &__text {
+        margin: l('spacing') / 1.5;
+    }
+}
+
+.align-self-right {
+    margin-left: auto !important;
+}
+
+.w-100 {
+    width: 100%;
 }
 </style>

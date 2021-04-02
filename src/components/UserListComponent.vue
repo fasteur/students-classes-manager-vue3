@@ -1,8 +1,8 @@
 <template>
-    <div>
+    <div class="user-list__container">
         <el-table :data="userList" style="width: 100%">
-            <el-table-column label="Name" prop="name"></el-table-column>
-            <el-table-column label="Age" prop="age"></el-table-column>
+            <el-table-column :label="labelName" prop="name"></el-table-column>
+            <el-table-column :label="labelAge" prop="age"></el-table-column>
             <el-table-column align="right">
                 <template #header></template>
                 <template #default="scope">
@@ -25,22 +25,38 @@
 </template>
 
 <script>
+import i18n from '@/i18n';
+import { computed } from '@vue/runtime-core';
+
 export default {
     props: ['title', 'userList'],
     emits: ['editUserChanges', 'deleteUserChanges'],
     setup(_, { emit }) {
-        function editUserChanges(user) {
-            emit('editUserChanges', user)
-        }
 
-        function deleteUserChanges(user) {
-            emit('deleteUserChanges', user)
-        }
+        // Table properties
+        const labelName = computed(() => i18n.global.t('USER_LIST.COLUMNS.NAME'))
+        const labelAge = computed(() => i18n.global.t('USER_LIST.COLUMNS.AGE'))
+
+        // Emits: actions on user field
+        const editUserChanges = (user) => emit('editUserChanges', user)
+        const deleteUserChanges = (user) => emit('deleteUserChanges', user)
 
         return {
             editUserChanges,
             deleteUserChanges,
+            labelAge,
+            labelName
         }
     },
 }
 </script>
+
+<style lang="scss">
+    @import '@/assets/style.scss';
+
+    .user-list {
+        &__container {
+            margin: l('spacing')
+        }
+    }
+</style>

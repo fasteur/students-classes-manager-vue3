@@ -140,10 +140,12 @@ export default class Home extends Vue {
         this.user = new User({})
     }
     private isUserAlreadyExist(newUser: User): boolean {
-        const alreadyExist = !!this.userList.find(
-            (user) => user.name == newUser.name && user.age == newUser.age
-        )
+        const alreadyExist = !!this.userList.find((user) => user.name == newUser.name && user.age == newUser.age)
         return alreadyExist
     }
 }
 </script>
+<style lang="scss">
+    @import '@/assets/style.scss';
+
+</style>
