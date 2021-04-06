@@ -25,14 +25,13 @@
 </template>
 
 <script>
-import i18n from '@/i18n';
-import { computed } from '@vue/runtime-core';
+import i18n from '@/i18n'
+import { computed } from '@vue/runtime-core'
 
 export default {
     props: ['title', 'userList'],
     emits: ['editUserChanges', 'deleteUserChanges'],
     setup(_, { emit }) {
-
         // Table properties
         const labelName = computed(() => i18n.global.t('USER_LIST.COLUMNS.NAME'))
         const labelAge = computed(() => i18n.global.t('USER_LIST.COLUMNS.AGE'))
@@ -45,18 +44,18 @@ export default {
             editUserChanges,
             deleteUserChanges,
             labelAge,
-            labelName
+            labelName,
         }
     },
 }
 </script>
 
 <style lang="scss">
-    @import '@/assets/style.scss';
+@import '@/assets/style.scss';
 
-    .user-list {
-        &__container {
-            margin: l('spacing')
-        }
+.user-list {
+    &__container {
+        margin: l('spacing');
     }
+}
 </style>

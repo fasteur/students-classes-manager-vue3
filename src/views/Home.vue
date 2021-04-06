@@ -1,6 +1,15 @@
 <template>
     <div class="home">
-        <h1>{{ $t('USER_LIST.TITLE') }}</h1>
+        
+        <h1 class="my-4">{{ $t('USER_LIST.TITLE') }}</h1>
+        
+        <UserFormComponent
+            :user="user"
+            :title="formTitle"
+            @formChange="changeUser($event)"
+            @resetFormChange="onResetForm($event)"
+        >
+        </UserFormComponent>
 
         <UserListComponent
             :title="title"
@@ -9,13 +18,6 @@
             @deleteUserChanges="onDeleteUser($event)"
         >
         </UserListComponent>
-
-        <UserFormComponent 
-            :user="user" 
-            :title="formTitle"
-            @formChange="changeUser($event)"
-            @resetFormChange="onResetForm($event)">
-        </UserFormComponent>
     </div>
 </template>
 
@@ -33,8 +35,8 @@ export interface IHomeData {
     title: string
     userList: User[]
     user: User
-    selectedUsers: IKeyValue,
-    formTitle: string,
+    selectedUsers: IKeyValue
+    formTitle: string
 }
 
 @Options({
@@ -146,6 +148,5 @@ export default class Home extends Vue {
 }
 </script>
 <style lang="scss">
-    @import '@/assets/style.scss';
-
+@import '@/assets/style.scss';
 </style>

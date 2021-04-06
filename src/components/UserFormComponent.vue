@@ -1,38 +1,56 @@
 <template>
     <div>
-        <h3>{{ $t(title) }}</h3>
-        <form @submit.prevent="submitForm()">
+        <el-button
+            class="float-right mr-3"
+            type="primary"
+            @click="dialogFormVisible = true"
+            >{{$t('GENERAL.ADD')}}</el-button
+        >
 
-            <div>
-                <div class="r-space-around">
-                    <div>
-                        <input
-                            type="text"
-                            v-model="form.name"
-                            placeholder="Ex: Florian"
-                        />
-                    </div>
-                    <div>
-                        <input
-                            type="text"
-                            v-model.number="form.age"
-                            placeholder="Ex: 28"
-                        />
-                    </div>
-                    <div>
-                        <button
-                            :class="{ active: formIsValid, disabled: !formIsValid }"
-                            type="submit"
-                        >
-                            {{ $t('GENERAL.SUBMIT') }}
-                        </button>
-                        <button type="button" @click="resetForm()">
-                            {{ $t('GENERAL.RESET') }}
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </form>
+        <el-dialog :title="$t(title)" v-model="dialogFormVisible" :append-to-body="true">
+            <el-form :model="form">
+                <el-form-item label="Nom" :label-width="formLabelWidth">
+                    <el-input
+                        type="text"
+                        v-model="form.name"
+                        placeholder="Ex: Florian"
+                        clearable
+                    />
+                </el-form-item>
+
+                <el-form-item label="Age" :label-width="formLabelWidth">
+                    <el-input-number
+                        v-model="form.age"
+                        :min="0"
+                        :max="120"
+                        label="age"
+                        controls-position="right"
+                    >
+                    </el-input-number>
+                </el-form-item>
+            </el-form>
+
+            <template #footer>
+                <span class="dialog-footer">
+                    <el-button
+                        :class="{ active: formIsValid, disabled: !formIsValid }"
+                        native-type="submit"
+                        type="primary"
+                        @click="submitForm()"
+                    >
+                        {{ $t('GENERAL.SUBMIT') }}
+                    </el-button>
+                    <el-button
+                        native-type="button"
+                        type="primary"
+                        plain
+                        @click="resetForm()"
+                    >
+                        {{ $t('GENERAL.RESET') }}
+                    </el-button>
+                </span>
+            </template>
+        </el-dialog>
     </div>
 </template>
 
@@ -45,16 +63,16 @@ export default {
     setup(props, { emit }) {
         const { user } = toRefs(props)
 
-        const form = ref({
-            name: '',
-            age: null,
-        })
+        const dialogFormVisible = ref(false)
+        const formLabelWidth = ref('120px')
+        const form = ref({ name: '', age: 0 })
 
         watch(user, function (val) {
             form.value = {
                 name: val.name,
                 age: val.age,
             }
+            dialogFormVisible.value = formIsValid.value
         })
 
         function formChange() {
@@ -68,12 +86,12 @@ export default {
 
         function resetForm() {
             form.value = {
-                name: '', 
-                age: null
+                name: '',
+                age: null,
             }
             emit('resetFormChange')
         }
-        
+
         const errors = computed(() => {
             const errors = []
 
@@ -95,14 +113,21 @@ export default {
             if (formIsValid.value) {
                 formChange()
                 resetForm()
+                closeModal()
             }
+        }
+
+        function closeModal() {
+            dialogFormVisible.value = false
         }
 
         return {
             submitForm,
             formIsValid,
             form,
-            resetForm
+            resetForm,
+            formLabelWidth,
+            dialogFormVisible,
         }
     },
 }

@@ -1,3 +1,11 @@
+// ------ FUNCTIONS ------
+
+@function l($value) {
+    @return map-get($layout, $value);
+}
+@function s($value) {
+    @return map-get($sizes, $value);
+}
 
 // ------ VARIABLES ------
 
@@ -10,16 +18,20 @@ $layout: (
     spacing: 2rem,
     border-radius: 0.6rem,
     border: 1px solid darken(white, 20%),
-) !global;
+);
+
+$sizes: (
+    1: l("spacing")/3,
+    2: l("spacing")/2,
+    3: l("spacing"),
+    4: l("spacing")*2,
+    5: l("spacing")*3,
+    auto: auto
+);
 
 $justifyContents: space-around, flex-start, space-between, flex-end,
     space-evenly;
 
-// ------ FUNCTIONS ------
-
-@function l($value) {
-    @return map-get($layout, $value);
-}
 
 // ------ MIXINS ------
 
@@ -48,3 +60,64 @@ $justifyContents: space-around, flex-start, space-between, flex-end,
         }
     }
 }
+
+@mixin createPadding() {
+    @each $key, $value in $sizes {
+        .p-#{$key} {
+            padding: $value!important;
+        }
+        .px-#{$key} {
+            margin-right: $value!important;
+            margin-left: $value!important;
+        }
+        .py-#{$key} {
+            margin-top: $value!important;
+            margin-bottom: $value!important;
+        }
+        .pr-#{$key} {
+            margin-right: $value!important;
+        }
+        .pl-#{$key} {
+            margin-left: $value!important;
+        }
+        .pb-#{$key} {
+            margin-bottom: $value!important;
+        }
+        .pt-#{$key} {
+            margin-top: $value!important;
+        }
+    }
+
+}
+
+@mixin createMargin() {
+    @each $key, $value in $sizes {
+        .m-#{$key} {
+            margin: $value!important;
+        }
+        .mx-#{$key} {
+            margin-right: $value!important;
+            margin-left: $value!important;
+        }
+        .my-#{$key} {
+            margin-top: $value!important;
+            margin-bottom: $value!important;
+        }
+        .mr-#{$key} {
+            margin-right: $value!important;
+        }
+        .ml-#{$key} {
+            margin-left: $value!important;
+        }
+        .mb-#{$key} {
+            margin-bottom: $value!important;
+        }
+        .mt-#{$key} {
+            margin-top: $value!important;
+        }
+    }
+}
+
+@include flexRowMixin();
+@include createMargin();
+@include createPadding();

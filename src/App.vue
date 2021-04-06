@@ -15,7 +15,7 @@
                         <el-menu-item index="2">
                             <router-link to="/about">{{ $t('APP.NAV.ABOUT') }}</router-link>
                         </el-menu-item>
-                        <li class="align-self-right lang-dropdown">
+                        <li class="ml-auto lang-dropdown">
                             <el-dropdown class="lang-dropdown__text">
                                 <span class="el-dropdown-link">
                                     {{ $t('APP.NAV.LANG.TITLE') }} <i class="el-icon-arrow-down el-icon--right"></i>
@@ -74,7 +74,6 @@ export default {
 <style lang="scss">
 @import '@/assets/style.scss';
 
-@include flexRowMixin();
 
 #app {
     font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -113,8 +112,8 @@ export default {
     }
 }
 
-.align-self-right {
-    margin-left: auto !important;
+.float-right {
+    float: right;
 }
 
 .w-100 {

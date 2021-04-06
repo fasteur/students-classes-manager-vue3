@@ -11,6 +11,7 @@
     }
   },
   "GENERAL": {
+    "ADD": "Add",
     "DELETE": "Delete",
     "EDIT": "Edit",
     "RESET": "Reset",
