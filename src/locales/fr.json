@@ -24,13 +24,13 @@
     }
   },
   "USER_FORM": {
-    "TITLE": "Ajouter/Éditer un utilisateur"
+    "TITLE": "Ajouter/Éditer un étudiant"
   },
   "USER_LIST": {
     "COLUMNS": {
       "AGE": "Âge",
       "NAME": "Nom"
     },
-    "TITLE": "Liste des utilisateurs"
+    "TITLE": "Liste des étudiants"
   }
 }
