@@ -17,20 +17,25 @@
     "RESET": "Reset",
     "SUBMIT": "Submit"
   },
+  "HOME": {
+    "TITLE": "Students list"
+  },
+  "STUDENT_FORM": {
+    "TITLE": "Add/Edit student"
+  },
+  "STUDENT_LIST": {
+    "TITLE": "Class: {className}"
+  },
   "TOAST": {
     "ERROR": {
       "MESSAGE": "Error status: {status}",
       "TITLE": "Error"
     }
   },
-  "USER_FORM": {
-    "TITLE": "Add/Edit student"
-  },
   "USER_LIST": {
     "COLUMNS": {
       "AGE": "Age",
       "NAME": "Name"
-    },
-    "TITLE": "Students list"
+    }
   }
 }

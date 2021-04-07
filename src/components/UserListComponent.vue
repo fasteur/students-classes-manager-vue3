@@ -1,5 +1,6 @@
 <template>
     <div class="user-list__container">
+        <h3 class="float-left">{{title}}</h3>
         <el-table :data="userList" style="width: 100%">
             <el-table-column :label="labelName" prop="name"></el-table-column>
             <el-table-column :label="labelAge" prop="age"></el-table-column>

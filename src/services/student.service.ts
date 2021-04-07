@@ -1,24 +1,24 @@
 import { AxiosResponse } from 'axios'
-import { User } from '../models'
+import { Student } from '../models'
 import { myAxios } from '../api/axios'
 
 class StudentService {
-    public getUsers(): Promise<AxiosResponse<any>> {
+    public getStudents(): Promise<AxiosResponse<any>> {
         return myAxios.get('/students.json')
     }
 
-    public addUser(user: User): Promise<AxiosResponse<any>> {
-        return myAxios.post('/students.json', user)
+    public addStudent(student: Student): Promise<AxiosResponse<any>> {
+        return myAxios.post('/students.json', student)
     }
 
-    public deleteUser(user: User): Promise<AxiosResponse<any>> {
-        return myAxios.delete(`/students/${user.id}.json`)
+    public deleteStudent(student: Student): Promise<AxiosResponse<any>> {
+        return myAxios.delete(`/students/${student.id}.json`)
     }
 
-    public editUser(user: User): Promise<AxiosResponse<any>> {
-        return myAxios.put(`/students/${user.id}.json`, {
-            name: user.name,
-            age: user.age,
+    public editStudent(student: Student): Promise<AxiosResponse<any>> {
+        return myAxios.put(`/students/${student.id}.json`, {
+            name: student.name,
+            age: student.age,
         })
     }
 }

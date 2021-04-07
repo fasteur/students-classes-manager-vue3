@@ -74,7 +74,6 @@ export default {
 <style lang="scss">
 @import '@/assets/style.scss';
 
-
 #app {
     font-family: Avenir, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -112,11 +111,4 @@ export default {
     }
 }
 
-.float-right {
-    float: right;
-}
-
-.w-100 {
-    width: 100%;
-}
 </style>

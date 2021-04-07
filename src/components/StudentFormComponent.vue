@@ -58,16 +58,16 @@
 import { computed, ref, watch, toRefs } from 'vue'
 
 export default {
-    props: ['title', 'user'],
+    props: ['title', 'student'],
     emits: ['formChange', 'resetFormChange'],
     setup(props, { emit }) {
-        const { user } = toRefs(props)
+        const { student } = toRefs(props)
 
         const dialogFormVisible = ref(false)
         const formLabelWidth = ref('120px')
         const form = ref({ name: '', age: 0 })
 
-        watch(user, function (val) {
+        watch(student, function (val) {
             form.value = {
                 name: val.name,
                 age: val.age,
@@ -77,7 +77,7 @@ export default {
 
         function formChange() {
             const formValue = {
-                ...props.user,
+                ...props.student,
                 ...form.value,
             }
             formValue.name.toString().trim()

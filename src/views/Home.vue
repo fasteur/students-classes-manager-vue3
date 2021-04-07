@@ -1,21 +1,21 @@
 <template>
     <div class="home">
         
-        <h1 class="my-4">{{ $t('USER_LIST.TITLE') }}</h1>
+        <h1 class="my-4">{{ $t('HOME.TITLE') }}</h1>
         
-        <UserFormComponent
-            :user="user"
+        <StudentFormComponent
+            :student="student"
             :title="formTitle"
-            @formChange="changeUser($event)"
+            @formChange="changeStudent($event)"
             @resetFormChange="onResetForm($event)"
         >
-        </UserFormComponent>
+        </StudentFormComponent>
 
         <UserListComponent
-            :title="title"
-            :user-list="userList"
-            @editUserChanges="onEditUser($event)"
-            @deleteUserChanges="onDeleteUser($event)"
+            :title="classTitle"
+            :user-list="studentList"
+            @editUserChanges="onEditStudent($event)"
+            @deleteUserChanges="onDeleteStudent($event)"
         >
         </UserListComponent>
     </div>
@@ -24,100 +24,89 @@
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
 
-import UserFormComponent from '@/components/UserFormComponent.vue'
+import StudentFormComponent from '@/components/StudentFormComponent.vue'
 import UserListComponent from '@/components/UserListComponent.vue'
-import { User } from '../models/index'
-import { IKeyValue } from '../models/interfaces/key-value.interface'
+import { Student } from '../models/index'
 import { UserDto } from '../models/interfaces/dto/user-dto.interface'
 import { studentService } from '../services/student.service'
 
 export interface IHomeData {
-    title: string
-    userList: User[]
-    user: User
-    selectedUsers: IKeyValue
+    classTitle: string
+    studentList: Student[]
+    student: Student
     formTitle: string
 }
 
 @Options({
     components: {
         UserListComponent,
-        UserFormComponent,
+        StudentFormComponent,
     },
 })
 export default class Home extends Vue {
     // DATAS
-    public title!: string
-    public userList!: User[]
-    public user!: User
-    public selectedUsers!: IKeyValue
+    public classTitle!: string
+    public studentList!: Student[]
+    public student!: Student
 
     data(): IHomeData {
         return {
-            title: 'Classe A1',
-            userList: [],
-            user: new User({}),
-            selectedUsers: {},
-            formTitle: 'USER_FORM.TITLE',
+            classTitle: this.$t('STUDENT_LIST.TITLE', { className: 'A1' }),
+            studentList: [],
+            student: new Student({}),
+            formTitle: 'STUDENT_FORM.TITLE',
         }
-    }
-
-    // COMPUTED
-    public get selectedCount(): number {
-        return Object.keys({ ...this.selectedUsers }).filter(
-            (key) => this.selectedUsers[key]
-        ).length
     }
 
     // LIFE CYCLE HOOKS
     created(): void {
-        this.getUsers()
+        this.getStudents()
     }
 
     // METHODS
 
-    private addUser(data: User): void {
+    private addStudent(data: Student): void {
         studentService
-            .addUser(data)
-            .then(() => this.getUsers())
+            .addStudent(data)
+            .then(() => this.getStudents())
             .catch((err) => console.log('err: ', err))
     }
 
-    private getUsers(): void {
+    private getStudents(): void {
         studentService
-            .getUsers()
+            .getStudents()
             .then((res) => {
                 if (!res || !res.data) {
-                    this.userList = []
+                    this.studentList = []
                     return
                 }
-                const newUserList = this.userListMappingFromDto(res.data)
-                this.userList = [...newUserList]
+                const newStudentList = this.studentListMappingFromDto(res.data)
+                this.studentList = [...newStudentList]
             })
             .catch((err) => console.log('err: ', err))
     }
 
-    public onDeleteUser(user: User): void {
+    public onDeleteStudent(user: Student): void {
         studentService
-            .deleteUser(user)
-            .then(() => this.getUsers())
+            .deleteStudent(user)
+            .then(() => this.getStudents())
             .catch((err) => console.log('err: ', err))
     }
 
-    public editUser(userToEdit: User): void {
+    public editStudent(studentToEdit: Student): void {
         studentService
-            .editUser(userToEdit)
+            .editStudent(studentToEdit)
             .then(() => {
-                this.getUsers()
-                this.user = new User({})
+                this.getStudents()
+                this.student = new Student({})
             })
             .catch((err) => console.log('err: ', err))
     }
 
-    private userListMappingFromDto(data: UserDto): User[] {
-        return Object.keys(data).reduce((acc: User[], curr: string) => {
+    private studentListMappingFromDto(data: UserDto): Student[] {
+        return Object.keys(data).reduce((acc: Student[], curr: string) => {
             acc.push(
-                new User({
+                new Student({
                     id: curr,
                     name: data[curr].name,
                     age: data[curr].age,
@@ -127,22 +116,22 @@ export default class Home extends Vue {
         }, [])
     }
 
-    public changeUser(newUser: User): void {
-        if (!newUser || (newUser && !(newUser.name || newUser.age))) return
-        if (newUser && newUser.id) return this.editUser(newUser)
-        if (this.isUserAlreadyExist(newUser)) return
-        this.addUser(newUser)
+    public changeStudent(newStudent: Student): void {
+        if (!newStudent || (newStudent && !(newStudent.name || newStudent.age))) return
+        if (newStudent && newStudent.id) return this.editStudent(newStudent)
+        if (this.isStudentAlreadyExist(newStudent)) return
+        this.addStudent(newStudent)
     }
 
-    public onEditUser(userToEdit: User): void {
-        this.user = new User({ ...userToEdit })
+    public onEditStudent(studentToEdit: Student): void {
+        this.student = new Student({ ...studentToEdit })
     }
 
     public onResetForm() {
-        this.user = new User({})
+        this.student = new Student({})
     }
-    private isUserAlreadyExist(newUser: User): boolean {
-        const alreadyExist = !!this.userList.find((user) => user.name == newUser.name && user.age == newUser.age)
+    private isStudentAlreadyExist(newStudent: Student): boolean {
+        const alreadyExist = !!this.studentList.find((student) => student.name == newStudent.name && student.age == newStudent.age)
         return alreadyExist
     }
 }

@@ -17,20 +17,25 @@
     "RESET": "Reset",
     "SUBMIT": "Soumettre"
   },
+  "HOME": {
+    "TITLE": "Liste des étudiants"
+  },
+  "STUDENT_FORM": {
+    "TITLE": "Ajouter/Éditer un étudiant"
+  },
+  "STUDENT_LIST": {
+    "TITLE": "Classe: {className}"
+  },
   "TOAST": {
     "ERROR": {
       "MESSAGE": "Erreur statut: {status}",
       "TITLE": "Erreur"
     }
   },
-  "USER_FORM": {
-    "TITLE": "Ajouter/Éditer un étudiant"
-  },
   "USER_LIST": {
     "COLUMNS": {
       "AGE": "Âge",
       "NAME": "Nom"
-    },
-    "TITLE": "Liste des étudiants"
+    }
   }
 }
