@@ -1,32 +1,36 @@
 {
-    "APP": {
-        "NAV": {
-            "HOME": "Accueil",
-            "LANG": {
-                "EN": "EN",
-                "FR": "FR"
-            }
-        }
-    },
-    "GENERAL": {
-        "DELETE": "Supprimer",
-        "EDIT": "Éditer",
-        "SUBMIT": "Soumettre"
-    },
-    "TOAST": {
-        "ERROR": {
-            "MESSAGE": "Erreur statut: {status}",
-            "TITLE": "Erreur"
-        }
-    },
-    "USER_FORM": {
-        "TITLE": "Ajouter/Éditer un utilisateur"
-    },
-    "USER_LIST": {
-        "COLUMNS": {
-            "AGE": "Âge",
-            "NAME": "Nom"
-        },
-        "TITLE": "Liste des utilisateurs"
+  "APP": {
+    "NAV": {
+      "ABOUT": "À propos",
+      "HOME": "Accueil",
+      "LANG": {
+        "EN": "EN",
+        "FR": "FR",
+        "TITLE": "Langue"
+      }
     }
+  },
+  "GENERAL": {
+    "ADD": "Ajouter",
+    "DELETE": "Supprimer",
+    "EDIT": "Éditer",
+    "RESET": "Reset",
+    "SUBMIT": "Soumettre"
+  },
+  "TOAST": {
+    "ERROR": {
+      "MESSAGE": "Erreur statut: {status}",
+      "TITLE": "Erreur"
+    }
+  },
+  "USER_FORM": {
+    "TITLE": "Ajouter/Éditer un étudiant"
+  },
+  "USER_LIST": {
+    "COLUMNS": {
+      "AGE": "Âge",
+      "NAME": "Nom"
+    },
+    "TITLE": "Liste des étudiants"
+  }
 }

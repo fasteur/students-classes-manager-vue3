@@ -1,37 +1,48 @@
 <template>
     <div class="home">
-        <h1>{{ $t('USER_LIST.TITLE') }}</h1>
+        
+        <h1 class="my-4">{{ $t('USER_LIST.TITLE') }}</h1>
+        
+        <UserFormComponent
+            :user="user"
+            :title="formTitle"
+            @formChange="changeUser($event)"
+            @resetFormChange="onResetForm($event)"
+        >
+        </UserFormComponent>
 
         <UserListComponent
             :title="title"
             :user-list="userList"
-            :selected-users="selectedUsers"
-            @selectedChanges="onSelectedChanges($event)"
             @editUserChanges="onEditUser($event)"
             @deleteUserChanges="onDeleteUser($event)"
-            @clearSelected="cleanSelected()"
         >
         </UserListComponent>
-
-        <!-- <UserFormComponent :user="user" @formChange="changeUser($event)">
-        </UserFormComponent> -->
     </div>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
 
-// import UserFormComponent from "./../components/UserFormComponent.vue";
+import UserFormComponent from '@/components/UserFormComponent.vue'
 import UserListComponent from '@/components/UserListComponent.vue'
 import { User } from '../models/index'
 import { IKeyValue } from '../models/interfaces/key-value.interface'
 import { UserDto } from '../models/interfaces/dto/user-dto.interface'
 import { userService } from '../services/user.service'
 
+export interface IHomeData {
+    title: string
+    userList: User[]
+    user: User
+    selectedUsers: IKeyValue
+    formTitle: string
+}
+
 @Options({
     components: {
         UserListComponent,
-        // UserFormComponent,
+        UserFormComponent,
     },
 })
 export default class Home extends Vue {
@@ -41,12 +52,13 @@ export default class Home extends Vue {
     public user!: User
     public selectedUsers!: IKeyValue
 
-    data() {
+    data(): IHomeData {
         return {
             title: 'Classe A1',
             userList: [],
             user: new User({}),
             selectedUsers: {},
+            formTitle: 'USER_FORM.TITLE',
         }
     }
 
@@ -58,20 +70,20 @@ export default class Home extends Vue {
     }
 
     // LIFE CYCLE HOOKS
-    created() {
+    created(): void {
         this.getUsers()
     }
 
     // METHODS
 
-    private addUser(data: User) {
+    private addUser(data: User): void {
         userService
             .addUser(data)
             .then(() => this.getUsers())
             .catch((err) => console.log('err: ', err))
     }
 
-    private getUsers() {
+    private getUsers(): void {
         userService
             .getUsers()
             .then((res) => {
@@ -115,14 +127,6 @@ export default class Home extends Vue {
         }, [])
     }
 
-    public onSelectedChanges(newSelectedUsers: IKeyValue): void {
-        this.selectedUsers = { ...newSelectedUsers }
-    }
-
-    public cleanSelected(): void {
-        this.selectedUsers = {}
-    }
-
     public changeUser(newUser: User): void {
         if (!newUser || (newUser && !(newUser.name || newUser.age))) return
         if (newUser && newUser.id) return this.editUser(newUser)
@@ -134,11 +138,15 @@ export default class Home extends Vue {
         this.user = new User({ ...userToEdit })
     }
 
+    public onResetForm() {
+        this.user = new User({})
+    }
     private isUserAlreadyExist(newUser: User): boolean {
-        const alreadyExist = !!this.userList.find(
-            (user) => user.name == newUser.name && user.age == newUser.age
-        )
+        const alreadyExist = !!this.userList.find((user) => user.name == newUser.name && user.age == newUser.age)
         return alreadyExist
     }
 }
 </script>
+<style lang="scss">
+@import '@/assets/style.scss';
+</style>

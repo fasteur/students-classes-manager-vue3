@@ -1,32 +1,36 @@
 {
-    "APP": {
-        "NAV": {
-            "HOME": "Home",
-            "LANG": {
-                "EN": "EN",
-                "FR": "FR"
-            }
-        }
-    },
-    "GENERAL": {
-        "DELETE": "Delete",
-        "EDIT": "Edit",
-        "SUBMIT": "Submit"
-    },
-    "TOAST": {
-        "ERROR": {
-            "MESSAGE": "Error status: {status}",
-            "TITLE": "Error"
-        }
-    },
-    "USER_FORM": {
-        "TITLE": "Add/Edit user"
-    },
-    "USER_LIST": {
-        "COLUMNS": {
-            "AGE": "Age",
-            "NAME": "Name"
-        },
-        "TITLE": "Users list"
+  "APP": {
+    "NAV": {
+      "ABOUT": "About",
+      "HOME": "Home",
+      "LANG": {
+        "EN": "EN",
+        "FR": "FR",
+        "TITLE": "Language"
+      }
     }
+  },
+  "GENERAL": {
+    "ADD": "Add",
+    "DELETE": "Delete",
+    "EDIT": "Edit",
+    "RESET": "Reset",
+    "SUBMIT": "Submit"
+  },
+  "TOAST": {
+    "ERROR": {
+      "MESSAGE": "Error status: {status}",
+      "TITLE": "Error"
+    }
+  },
+  "USER_FORM": {
+    "TITLE": "Add/Edit student"
+  },
+  "USER_LIST": {
+    "COLUMNS": {
+      "AGE": "Age",
+      "NAME": "Name"
+    },
+    "TITLE": "Students list"
+  }
 }
