@@ -13,6 +13,15 @@
                     <el-input
                         type="text"
                         v-model="form.name"
+                        placeholder="Ex: Asteur"
+                        clearable
+                    />
+                </el-form-item>
+
+                <el-form-item label="FirsName" :label-width="formLabelWidth">
+                    <el-input
+                        type="text"
+                        v-model="form.firstName"
                         placeholder="Ex: Florian"
                         clearable
                     />
@@ -54,14 +63,8 @@
     </div>
 </template>
 
-<script lang="ts">
+<script>
 import { computed, ref, watch, toRefs, Ref } from 'vue'
-
-
-export type StudentFormType = Ref<{
-    name: string
-    age: number | null
-}>
 
 export default {
     props: ['title', 'student'],
@@ -69,14 +72,15 @@ export default {
     setup(props, { emit }) {
         const { student } = toRefs(props)
 
-        const dialogFormVisible: Ref<boolean> = ref(false)
-        const formLabelWidth: Ref<string> = ref('120px')
+        const dialogFormVisible = ref(false)
+        const formLabelWidth = ref('120px')
 
-        const form: StudentFormType = ref({ name: '', age: 0 })
+        const form = ref({ name: '', firstName: '', age: 0 })
 
         watch(student, function (val) {
             form.value = {
                 name: val.name,
+                firstName: val.firstName,
                 age: val.age,
             }
             dialogFormVisible.value = formIsValid.value
@@ -88,12 +92,15 @@ export default {
                 ...form.value,
             }
             formValue.name.toString().trim()
+            formValue.firstName.toString().trim()
+            console.log('formValue: ', formValue)
             emit('formChange', formValue)
         }
 
         function resetForm() {
             form.value = {
                 name: '',
+                firstName: '',
                 age: null,
             }
             emit('resetFormChange')
@@ -104,6 +111,9 @@ export default {
 
             if (!form.value.name) {
                 errors.push('Name field is required!')
+            }
+            if (!form.value.firstName) {
+                errors.push('First field is required!')
             }
             if (!form.value.age) {
                 errors.push('Age is required!')

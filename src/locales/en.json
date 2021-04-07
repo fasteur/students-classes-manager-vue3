@@ -35,7 +35,8 @@
   "USER_LIST": {
     "COLUMNS": {
       "AGE": "Age",
-      "NAME": "Name"
+      "NAME": "Name",
+      "FIRST_NAME": "First name"
     }
   }
 }

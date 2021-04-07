@@ -105,6 +105,7 @@ export default class Home extends Vue {
                 new Student({
                     id: curr,
                     name: data[curr].name,
+                    firstName: data[curr].firstName,
                     age: data[curr].age,
                 })
             )
