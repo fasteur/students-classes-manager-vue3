@@ -29,7 +29,7 @@ import UserListComponent from '@/components/UserListComponent.vue'
 import { User } from '../models/index'
 import { IKeyValue } from '../models/interfaces/key-value.interface'
 import { UserDto } from '../models/interfaces/dto/user-dto.interface'
-import { userService } from '../services/user.service'
+import { studentService } from '../services/student.service'
 
 export interface IHomeData {
     title: string
@@ -77,14 +77,14 @@ export default class Home extends Vue {
     // METHODS
 
     private addUser(data: User): void {
-        userService
+        studentService
             .addUser(data)
             .then(() => this.getUsers())
             .catch((err) => console.log('err: ', err))
     }
 
     private getUsers(): void {
-        userService
+        studentService
             .getUsers()
             .then((res) => {
                 if (!res || !res.data) {
@@ -98,14 +98,14 @@ export default class Home extends Vue {
     }
 
     public onDeleteUser(user: User): void {
-        userService
+        studentService
             .deleteUser(user)
             .then(() => this.getUsers())
             .catch((err) => console.log('err: ', err))
     }
 
     public editUser(userToEdit: User): void {
-        userService
+        studentService
             .editUser(userToEdit)
             .then(() => {
                 this.getUsers()
