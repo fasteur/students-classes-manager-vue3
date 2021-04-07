@@ -54,8 +54,14 @@
     </div>
 </template>
 
-<script>
-import { computed, ref, watch, toRefs } from 'vue'
+<script lang="ts">
+import { computed, ref, watch, toRefs, Ref } from 'vue'
+
+
+export type StudentFormType = Ref<{
+    name: string
+    age: number | null
+}>
 
 export default {
     props: ['title', 'student'],
@@ -63,9 +69,10 @@ export default {
     setup(props, { emit }) {
         const { student } = toRefs(props)
 
-        const dialogFormVisible = ref(false)
-        const formLabelWidth = ref('120px')
-        const form = ref({ name: '', age: 0 })
+        const dialogFormVisible: Ref<boolean> = ref(false)
+        const formLabelWidth: Ref<string> = ref('120px')
+
+        const form: StudentFormType = ref({ name: '', age: 0 })
 
         watch(student, function (val) {
             form.value = {

@@ -12,7 +12,6 @@
         </StudentFormComponent>
 
         <UserListComponent
-            :title="classTitle"
             :user-list="studentList"
             @editUserChanges="onEditStudent($event)"
             @deleteUserChanges="onDeleteStudent($event)"
@@ -31,7 +30,6 @@ import { UserDto } from '../models/interfaces/dto/user-dto.interface'
 import { studentService } from '../services/student.service'
 
 export interface IHomeData {
-    classTitle: string
     studentList: Student[]
     student: Student
     formTitle: string
@@ -45,13 +43,11 @@ export interface IHomeData {
 })
 export default class Home extends Vue {
     // DATAS
-    public classTitle!: string
     public studentList!: Student[]
     public student!: Student
 
     data(): IHomeData {
         return {
-            classTitle: this.$t('STUDENT_LIST.TITLE', { className: 'A1' }),
             studentList: [],
             student: new Student({}),
             formTitle: 'STUDENT_FORM.TITLE',
