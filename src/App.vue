@@ -13,7 +13,7 @@
                             <router-link to="/">{{ $t('APP.NAV.HOME') }}</router-link>
                         </el-menu-item>
                         <el-menu-item index="2">
-                            <router-link to="/about">{{ $t('APP.NAV.ABOUT') }}</router-link>
+                            <router-link to="/teacher-dashboard">{{ $t('APP.NAV.TEACHER_DASHBOARD') }}</router-link>
                         </el-menu-item>
                         <li class="ml-auto lang-dropdown">
                             <el-dropdown class="lang-dropdown__text">

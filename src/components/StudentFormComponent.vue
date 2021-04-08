@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import { computed, ref, watch, toRefs, Ref } from 'vue'
+import { computed, ref, watch, toRefs } from 'vue'
 
 export default {
     props: ['title', 'student'],

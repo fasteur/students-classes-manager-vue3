@@ -1,7 +1,7 @@
 {
   "APP": {
     "NAV": {
-      "ABOUT": "About",
+      "TEACHER_DASHBOARD": "DASHBOARD",
       "HOME": "Home",
       "LANG": {
         "EN": "EN",
