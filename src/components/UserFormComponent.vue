@@ -3,7 +3,7 @@
         <el-button
             class="float-right mr-3"
             type="primary"
-            @click="dialogFormVisible = true"
+            @click="openModal()"
             >{{$t('GENERAL.ADD')}}</el-button
         >
 
@@ -67,44 +67,38 @@
 import { computed, ref, watch, toRefs } from 'vue'
 
 export default {
-    props: ['title', 'student'],
-    emits: ['formChange', 'resetFormChange'],
+    props: ['title', 'user', 'showModal'],
+    emits: ['addUserChange', 'editUserChange', 'resetFormChange', 'showModalChange'],
     setup(props, { emit }) {
-        const { student } = toRefs(props)
 
+        // --- PROPS ---
+        const { user, showModal } = toRefs(props)
+
+        // --- DATAS ---
         const dialogFormVisible = ref(false)
         const formLabelWidth = ref('120px')
-
+        const isEditMode = ref(false)
         const form = ref({ name: '', firstName: '', age: 0 })
 
-        watch(student, function (val) {
+        // --- WATCHERS ---
+        watch(user, function (val) {
             form.value = {
                 name: val.name,
                 firstName: val.firstName,
                 age: val.age,
             }
-            dialogFormVisible.value = formIsValid.value
+            isEditMode.value = formIsValid.value
         })
 
-        function formChange() {
-            const formValue = {
-                ...props.student,
-                ...form.value,
-            }
-            formValue.name.toString().trim()
-            formValue.firstName.toString().trim()
-            console.log('formValue: ', formValue)
-            emit('formChange', formValue)
-        }
+        watch(showModal, function (val) {
+            dialogFormVisible.value = val
+        })
 
-        function resetForm() {
-            form.value = {
-                name: '',
-                firstName: '',
-                age: null,
-            }
-            emit('resetFormChange')
-        }
+        watch(dialogFormVisible, function (val) {
+            emit('showModalChange', val)
+        })
+
+        // --- COMPUTEDS ---
 
         const errors = computed(() => {
             const errors = []
@@ -126,16 +120,56 @@ export default {
 
         const formIsValid = computed(() => !(errors.value.length > 0))
 
+
+        // --- FUNCTIONS ---
+
+        // USER
+        function addUser() {
+            emit('addUserChange', getFormValue())
+        }
+        function editUser() {
+            emit('editUserChange', getFormValue())
+        }
+
+        // FORM 
+        function getFormValue() {
+            const formValue = {
+                ...props.user,
+                ...form.value,
+            }
+            formValue.name.toString().trim()
+            formValue.firstName.toString().trim()
+            return formValue
+        }
+
+        function resetForm() {
+            form.value = {
+                name: '',
+                firstName: '',
+                age: null,
+            }
+            emit('resetFormChange')
+        }
+
         function submitForm() {
             if (formIsValid.value) {
-                formChange()
+                if (!isEditMode.value) {
+                    addUser()
+                } else if (isEditMode.value) {
+                    editUser()
+                }
                 resetForm()
                 closeModal()
             }
         }
 
+        // MODAL
         function closeModal() {
             dialogFormVisible.value = false
+        }
+
+        function openModal() {
+            dialogFormVisible.value = true
         }
 
         return {
@@ -145,6 +179,7 @@ export default {
             resetForm,
             formLabelWidth,
             dialogFormVisible,
+            openModal
         }
     },
 }

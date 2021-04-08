@@ -19,6 +19,7 @@ class StudentService {
         return myAxios.put(`/students/${student.id}.json`, {
             name: student.name,
             age: student.age,
+            firstName: student.firstName
         })
     }
 }

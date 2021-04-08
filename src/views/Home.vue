@@ -3,17 +3,20 @@
         
         <h1 class="my-4">{{ $t('HOME.TITLE') }}</h1>
         
-        <StudentFormComponent
-            :student="student"
+        <UserFormComponent
+            :user="student"
             :title="formTitle"
-            @formChange="changeStudent($event)"
+            :showModal="showModal"
+            @addUserChange="onAddStudent($event)"
+            @editUserChange="onEditStudent($event)"
             @resetFormChange="onResetForm($event)"
+            @showModalChange="onShowModal($event)"
         >
-        </StudentFormComponent>
+        </UserFormComponent>
 
         <UserListComponent
             :user-list="studentList"
-            @editUserChanges="onEditStudent($event)"
+            @editUserChanges="opentEditForm($event)"
             @deleteUserChanges="onDeleteStudent($event)"
         >
         </UserListComponent>
@@ -23,9 +26,9 @@
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
 
-import StudentFormComponent from '@/components/StudentFormComponent.vue'
+import UserFormComponent from '@/components/UserFormComponent.vue'
 import UserListComponent from '@/components/UserListComponent.vue'
-import { Student } from '../models/index'
+import { Student, User } from '../models/index'
 import { UserDto } from '../models/interfaces/dto/user-dto.interface'
 import { studentService } from '../services/student.service'
 
@@ -33,33 +36,38 @@ export interface IHomeData {
     studentList: Student[]
     student: Student
     formTitle: string
+    showModal: boolean
 }
 
 @Options({
     components: {
         UserListComponent,
-        StudentFormComponent,
+        UserFormComponent,
     },
 })
 export default class Home extends Vue {
-    // DATAS
+    // --- DATAS ---
     public studentList!: Student[]
     public student!: Student
+    public showModal!: boolean
 
     data(): IHomeData {
         return {
             studentList: [],
             student: new Student({}),
             formTitle: 'STUDENT_FORM.TITLE',
+            showModal: false,
         }
     }
 
-    // LIFE CYCLE HOOKS
+    // --- LIFE CYCLE HOOKS ---
     created(): void {
         this.getStudents()
     }
 
-    // METHODS
+    // --- METHODS ---
+
+    // Call services
 
     private addStudent(data: Student): void {
         studentService
@@ -82,9 +90,9 @@ export default class Home extends Vue {
             .catch((err) => console.log('err: ', err))
     }
 
-    public onDeleteStudent(user: Student): void {
+    public onDeleteStudent(student: Student): void {
         studentService
-            .deleteStudent(user)
+            .deleteStudent(student)
             .then(() => this.getStudents())
             .catch((err) => console.log('err: ', err))
     }
@@ -98,6 +106,8 @@ export default class Home extends Vue {
             })
             .catch((err) => console.log('err: ', err))
     }
+
+    // Dto mapping
 
     private studentListMappingFromDto(data: UserDto): Student[] {
         return Object.keys(data).reduce((acc: Student[], curr: string) => {
@@ -113,23 +123,46 @@ export default class Home extends Vue {
         }, [])
     }
 
-    public changeStudent(newStudent: Student): void {
-        if (!newStudent || (newStudent && !(newStudent.name || newStudent.age))) return
-        if (newStudent && newStudent.id) return this.editStudent(newStudent)
+    // Student form actions
+
+    public onAddStudent(newStudent: Student): void {
+        this.formIsValid(newStudent)
         if (this.isStudentAlreadyExist(newStudent)) return
         this.addStudent(newStudent)
     }
 
-    public onEditStudent(studentToEdit: Student): void {
+    public onEditStudent(newStudent: Student): void {
+        this.formIsValid(newStudent)
+        this.editStudent(newStudent)
+    }
+
+    /** 
+     * @description check if all required form fields are filled
+    */
+    private formIsValid(formValue: User) {
+        if (!formValue || (formValue && !(formValue.name || formValue.age || formValue.firstName))) return
+    }
+    
+    /**
+    * @description set student data & open form modal
+    */
+    public opentEditForm(studentToEdit: Student): void {
         this.student = new Student({ ...studentToEdit })
+        this.showModal = true
     }
 
     public onResetForm() {
         this.student = new Student({})
     }
+
     private isStudentAlreadyExist(newStudent: Student): boolean {
         const alreadyExist = !!this.studentList.find((student) => student.name == newStudent.name && student.age == newStudent.age)
         return alreadyExist
+    }
+
+    // Modal
+    public onShowModal(show: boolean) {
+        this.showModal = show
     }
 }
 </script>
