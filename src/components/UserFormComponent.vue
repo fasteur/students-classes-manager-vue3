@@ -68,7 +68,7 @@ import { computed, ref, watch, toRefs } from 'vue'
 
 export default {
     props: ['title', 'user', 'showModal'],
-    emits: ['addUserChange', 'editUserChange', 'resetFormChange', 'showModalChange'],
+    emits: ['addUserChange', 'editUserChange', 'resetFormChange', 'update:showModal'],
     setup(props, { emit }) {
 
         // --- PROPS ---
@@ -95,7 +95,7 @@ export default {
         })
 
         watch(dialogFormVisible, function (val) {
-            emit('showModalChange', val)
+            emit('update:showModal', val)
         })
 
         // --- COMPUTEDS ---

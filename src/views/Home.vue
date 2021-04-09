@@ -10,7 +10,7 @@
             @addUserChange="onAddStudent($event)"
             @editUserChange="onEditStudent($event)"
             @resetFormChange="onResetForm($event)"
-            @showModalChange="onShowModal($event)"
+            v-model:showModal="showModal"
         >
         </UserFormComponent>
 
@@ -158,11 +158,6 @@ export default class Home extends Vue {
     private isStudentAlreadyExist(newStudent: Student): boolean {
         const alreadyExist = !!this.studentList.find((student) => student.name == newStudent.name && student.age == newStudent.age)
         return alreadyExist
-    }
-
-    // Modal
-    public onShowModal(show: boolean) {
-        this.showModal = show
     }
 }
 </script>
