@@ -91,6 +91,9 @@ export default {
         })
 
         watch(showModal, function (val) {
+            if (!val) {
+                resetForm()
+            }
             dialogFormVisible.value = val
         })
 
@@ -132,6 +135,7 @@ export default {
         }
 
         // FORM 
+        
         function getFormValue() {
             const formValue = {
                 ...props.user,
@@ -142,12 +146,16 @@ export default {
             return formValue
         }
 
-        function resetForm() {
+        function clearForm() {
             form.value = {
                 name: '',
                 firstName: '',
                 age: null,
             }
+        }
+
+        function resetForm() {
+            clearForm()
             emit('resetFormChange')
         }
 

@@ -12,7 +12,7 @@ export default {
         const router = useRouter()
         const route = useRoute()
         onBeforeMount(() => {
-            const user = null
+            const user = {}
             if (!user) {
                 router.replace('/login')
             } else if (route.path == "/login" || route.path == "/register") {
