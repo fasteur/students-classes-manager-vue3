@@ -10,12 +10,19 @@ const routes: Array<RouteRecordRaw> = [
     {
         path: '/teacher-dashboard',
         name: 'TeacherDashboard',
-        // route level code-splitting
-        // this generates a separate chunk (about.[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
         component: () =>
             import(/* webpackChunkName: "about" */ '../views/TeacherDashboard.vue'),
     },
+    {
+        path: '/login',
+        name: 'Login', 
+        component: () => import('../views/Login.vue')
+    },
+    {
+        path: '/register',
+        name: 'Register', 
+        component: () => import('../views/Register.vue')
+    }
 ]
 
 const router = createRouter({

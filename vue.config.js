@@ -10,4 +10,7 @@ module.exports = {
             fullInstall: true,
         },
     },
+    configureWebpack: {
+        devtool: 'source-map',
+    },
 }
