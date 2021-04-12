@@ -8,6 +8,7 @@
         >
 
         <el-dialog :title="$t(title)" v-model="dialogFormVisible" :append-to-body="true">
+            
             <UserFormComponent v-model:form="form"></UserFormComponent>
 
             <template #footer>
