@@ -8,36 +8,7 @@
         >
 
         <el-dialog :title="$t(title)" v-model="dialogFormVisible" :append-to-body="true">
-            <el-form :model="form">
-                <el-form-item label="Nom" :label-width="formLabelWidth">
-                    <el-input
-                        type="text"
-                        v-model="form.name"
-                        placeholder="Ex: Asteur"
-                        clearable
-                    />
-                </el-form-item>
-
-                <el-form-item label="FirsName" :label-width="formLabelWidth">
-                    <el-input
-                        type="text"
-                        v-model="form.firstName"
-                        placeholder="Ex: Florian"
-                        clearable
-                    />
-                </el-form-item>
-
-                <el-form-item label="Age" :label-width="formLabelWidth">
-                    <el-input-number
-                        v-model="form.age"
-                        :min="0"
-                        :max="120"
-                        label="age"
-                        controls-position="right"
-                    >
-                    </el-input-number>
-                </el-form-item>
-            </el-form>
+            <UserFormComponent v-model:form="form"></UserFormComponent>
 
             <template #footer>
                 <span class="dialog-footer">
@@ -65,8 +36,12 @@
 
 <script>
 import { computed, ref, watch, toRefs } from 'vue'
+import UserFormComponent from '@/components/UserFormComponent.vue'
 
 export default {
+    components: {
+        UserFormComponent
+    },
     props: ['title', 'user', 'showModal'],
     emits: ['addUserChange', 'editUserChange', 'resetFormChange', 'update:showModal'],
     setup(props, { emit }) {
