@@ -1,5 +1,6 @@
 <template>
     <div class="login">
-        Login
+        <h1>Login</h1>
+        <p>Need an account? <router-link to="/register">Register here</router-link></p>
     </div>
 </template>
