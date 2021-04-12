@@ -3,7 +3,7 @@
         
         <h1 class="my-4">{{ $t('HOME.TITLE') }}</h1>
         
-        <UserFormComponent
+        <UserFormModalComponent
             :user="student"
             :title="formTitle"
             :showModal="showModal"
@@ -12,7 +12,7 @@
             @resetFormChange="onResetForm($event)"
             v-model:showModal="showModal"
         >
-        </UserFormComponent>
+        </UserFormModalComponent>
 
         <UserListComponent
             :user-list="studentList"
@@ -26,7 +26,7 @@
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
 
-import UserFormComponent from '@/components/UserFormComponent.vue'
+import UserFormModalComponent from '@/components/UserFormModalComponent.vue'
 import UserListComponent from '@/components/UserListComponent.vue'
 import { Student, User } from '../models/index'
 import { UserDto } from '../models/interfaces/dto/user-dto.interface'
@@ -42,7 +42,7 @@ export interface IHomeData {
 @Options({
     components: {
         UserListComponent,
-        UserFormComponent,
+        UserFormModalComponent,
     },
 })
 export default class Home extends Vue {
