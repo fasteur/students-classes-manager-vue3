@@ -10,19 +10,25 @@
                         @select="handleSelect"
                     >
                         <el-menu-item index="1">
-                            <router-link to="/">{{ $t('APP.NAV.HOME') }}</router-link>
+                            <router-link to="/">{{
+                                $t('APP.NAV.HOME')
+                            }}</router-link>
                         </el-menu-item>
                         <el-menu-item index="2">
-                            <router-link to="/teacher-dashboard">{{ $t('APP.NAV.TEACHER_DASHBOARD') }}</router-link>
+                            <router-link to="/teacher-dashboard">{{
+                                $t('APP.NAV.TEACHER_DASHBOARD')
+                            }}</router-link>
                         </el-menu-item>
                         <li class="ml-auto lang-dropdown">
-                            <LangDropdownComponent @changeLanguage="activeLanguage($event)"></LangDropdownComponent>
+                            <LangDropdownComponent
+                                @changeLanguage="activeLanguage($event)"
+                            ></LangDropdownComponent>
                         </li>
                     </el-menu>
                 </el-header>
 
                 <el-main>
-                    <router-view name="content"/>
+                    <router-view name="content" />
                 </el-main>
             </el-container>
         </div>
@@ -36,7 +42,7 @@ import LangDropdownComponent from '@/components/utils/lang/LangDropdownComponent
 
 export default {
     components: {
-        LangDropdownComponent
+        LangDropdownComponent,
     },
     props: [],
     setup() {
@@ -90,7 +96,7 @@ export default {
         @include container(l('full-width'));
     }
     &__inner {
-        @include container(l('max-width')/2);
+        @include container(l('max-width') / 2);
     }
 }
 
@@ -100,5 +106,4 @@ export default {
         margin: l('spacing') / 1.5;
     }
 }
-
 </style>

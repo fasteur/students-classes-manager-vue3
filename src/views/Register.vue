@@ -15,19 +15,18 @@ export default {
         RegisterFormComponent,
     },
     setup() {
-
-        const form = ref({ 
+        const form = ref({
             name: '',
             firstName: '',
             password: '',
             email: '',
-            age: 0
+            age: 0,
         })
 
         return {
             form,
         }
-    }
+    },
 }
 </script>
 <style lang="scss">

@@ -9,7 +9,7 @@
                 <el-dropdown-item @click="$emit('changeLanguage', 'fr')">
                     {{ $t('APP.NAV.LANG.FR') }}
                 </el-dropdown-item>
-                <el-dropdown-item @click="$emit('changeLanguage','en')">
+                <el-dropdown-item @click="$emit('changeLanguage', 'en')">
                     {{ $t('APP.NAV.LANG.EN') }}
                 </el-dropdown-item>
             </el-dropdown-menu>

@@ -1,13 +1,13 @@
 <template>
     <div>
-        <router-view name="container"/>
+        <router-view name="container" />
     </div>
 </template>
 
 <script>
 import { onBeforeMount } from '@vue/runtime-core'
 import { useRoute, useRouter } from 'vue-router'
-import firebase from 'firebase';
+import firebase from 'firebase'
 
 export default {
     setup() {
@@ -23,6 +23,6 @@ export default {
                 }
             })
         })
-    }
+    },
 }
 </script>

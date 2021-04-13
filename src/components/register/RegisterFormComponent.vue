@@ -1,70 +1,73 @@
 <template>
     <div class="container__wrapper">
+        <el-form
+            :model="userForm"
+            :rules="rules"
+            label-position="left"
+            label-width="120px"
+            class="container__inner"
+        >
+            <el-form-item :label="labels.name" prop="name">
+                <el-input
+                    size="medium"
+                    type="text"
+                    v-model="userForm.name"
+                    placeholder="Ex: Asteur"
+                    clearable
+                />
+            </el-form-item>
 
-         <el-form :model="userForm" :rules="rules" label-position="left" label-width="120px" class="container__inner">
-                <el-form-item :label="labels.name" prop="name" >
-                    <el-input
-                        size="medium"
-                        type="text"
-                        v-model="userForm.name"
-                        placeholder="Ex: Asteur"
-                        clearable
-                    />
-                </el-form-item>
+            <el-form-item :label="labels.firstName" prop="firstName">
+                <el-input
+                    type="text"
+                    v-model="userForm.firstName"
+                    placeholder="Ex: Florian"
+                    clearable
+                />
+            </el-form-item>
 
-                <el-form-item :label="labels.firstName" prop="firstName">
-                    <el-input
-                        type="text"
-                        v-model="userForm.firstName"
-                        placeholder="Ex: Florian"
-                        clearable
-                    />
-                </el-form-item>
+            <el-form-item :label="labels.age" prop="age">
+                <el-input-number
+                    v-model="userForm.age"
+                    :min="0"
+                    :max="120"
+                    label="age"
+                    controls-position="right"
+                >
+                </el-input-number>
+            </el-form-item>
 
-                <el-form-item :label="labels.age" prop="age">
-                    <el-input-number
-                        v-model="userForm.age"
-                        :min="0"
-                        :max="120"
-                        label="age"
-                        controls-position="right"
-                    >
-                    </el-input-number>
-                </el-form-item>
+            <el-form-item prop="email" :label="labels.email">
+                <el-input v-model="userForm.email"></el-input>
+            </el-form-item>
 
-                <el-form-item prop="email" :label="labels.email">
-                    <el-input v-model="userForm.email"></el-input>
-                </el-form-item>
-
-
-                <el-form-item :label="labels.password" prop="password">
-                    <el-input
-                        type="text"
-                        :show-password="true"
-                        v-model="userForm.password"
-                        placeholder="Ex: 65fddfyyhb$"
-                        clearable
-                    />
-                </el-form-item>
-
-            </el-form>
-
+            <el-form-item :label="labels.password" prop="password">
+                <el-input
+                    type="text"
+                    :show-password="true"
+                    v-model="userForm.password"
+                    placeholder="Ex: 65fddfyyhb$"
+                    clearable
+                />
+            </el-form-item>
+        </el-form>
     </div>
 </template>
 
-<script lang="ts">
+<script>
+/* eslint-disable */
 import { ref, toRefs, watch, onMounted, computed } from 'vue'
 import i18n from '@/i18n';
 import { validators } from '@/utils/form/validator-rules'
 import { FormGroup } from '@/utils/form/form-group'
 
-declare type RegisterFormPropeties = { 
-    name: string,
-    firstName: string,
-    password: string,
-    email: string,
-    age: number
-}
+// declare type RegisterFormPropeties = { 
+//     name: string,
+//     firstName: string,
+//     password: string,
+//     email: string,
+//     age: number
+// }
 
 export default {
     props: ['form'],
@@ -113,7 +116,7 @@ export default {
             userForm.value = form.value
         })
 
-        watch(form, function (val: RegisterFormPropeties) {
+        watch(form, function (val) {
             userForm.value = val
         })
 

@@ -1,6 +1,6 @@
 <template>
     <div class="user-list__container">
-        <h3 class="float-left">{{title}}</h3>
+        <h3 class="float-left">{{ title }}</h3>
         <el-table :data="userList" style="width: 100%">
             <el-table-column :label="labelName" prop="name"></el-table-column>
             <el-table-column :label="labelFirstName" prop="firstName"></el-table-column>

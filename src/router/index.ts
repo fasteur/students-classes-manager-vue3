@@ -14,8 +14,8 @@ const routes: Array<RouteRecordRaw> = [
             {
                 path: '',
                 components: {
-                    content: Home
-                }
+                    content: Home,
+                },
             },
             {
                 path: 'teacher-dashboard',
@@ -23,8 +23,8 @@ const routes: Array<RouteRecordRaw> = [
                 components: {
                     content: () => import(/* webpackChunkName: "about" */ '../views/TeacherDashboard.vue')
                 },
-            }
-        ]
+            },
+        ],
     },
     {
         path: '/auth',
@@ -35,21 +35,20 @@ const routes: Array<RouteRecordRaw> = [
         children: [
             {
                 path: '/login',
-                name: 'Login', 
+                name: 'Login',
                 components: {
-                    content: () => import('../views/Login.vue')
-                }
+                    content: () => import('../views/Login.vue'),
+                },
             },
             {
                 path: '/register',
-                name: 'Register', 
+                name: 'Register',
                 components: {
-                    content: () => import('../views/Register.vue')
-                }
-            }
-        ]
+                    content: () => import('../views/Register.vue'),
+                },
+            },
+        ],
     },
-   
 ]
 
 const router = createRouter({

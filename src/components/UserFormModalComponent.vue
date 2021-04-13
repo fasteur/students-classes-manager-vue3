@@ -4,11 +4,14 @@
             class="float-right mr-3"
             type="primary"
             @click="openModal()"
-            >{{$t('GENERAL.ADD')}}</el-button
+            >{{ $t('GENERAL.ADD') }}</el-button
         >
 
-        <el-dialog :title="$t(title)" v-model="dialogFormVisible" :append-to-body="true">
-            
+        <el-dialog
+            :title="$t(title)"
+            v-model="dialogFormVisible"
+            :append-to-body="true"
+        >
             <UserFormComponent v-model:form="form"></UserFormComponent>
 
             <template #footer>
@@ -41,12 +44,16 @@ import UserFormComponent from '@/components/UserFormComponent.vue'
 
 export default {
     components: {
-        UserFormComponent
+        UserFormComponent,
     },
     props: ['title', 'user', 'showModal'],
-    emits: ['addUserChange', 'editUserChange', 'resetFormChange', 'update:showModal'],
+    emits: [
+        'addUserChange',
+        'editUserChange',
+        'resetFormChange',
+        'update:showModal',
+    ],
     setup(props, { emit }) {
-
         // --- PROPS ---
         const { user, showModal } = toRefs(props)
 
@@ -99,7 +106,6 @@ export default {
 
         const formIsValid = computed(() => !(errors.value.length > 0))
 
-
         // --- FUNCTIONS ---
 
         // USER
@@ -110,8 +116,8 @@ export default {
             emit('editUserChange', getFormValue())
         }
 
-        // FORM 
-        
+        // FORM
+
         function getFormValue() {
             const formValue = {
                 ...props.user,
@@ -163,7 +169,7 @@ export default {
             resetForm,
             formLabelWidth,
             dialogFormVisible,
-            openModal
+            openModal,
         }
     },
 }

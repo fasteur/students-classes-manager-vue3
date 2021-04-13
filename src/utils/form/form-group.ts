@@ -1,8 +1,8 @@
-import { IKeyValue } from '../../models/interfaces/key-value.interface';
+import { IKeyValue } from '../../models/interfaces/key-value.interface'
 
 export declare interface FormProperties {
-    value: any;
-    rules: IKeyValue[];
+    value: any
+    rules: IKeyValue[]
 }
 
 export declare type FormControl = {
@@ -10,12 +10,11 @@ export declare type FormControl = {
 }
 
 export class FormGroup {
-
-    public value!: IKeyValue;
-    public rules?: IKeyValue;
+    public value!: IKeyValue
+    public rules?: IKeyValue
 
     constructor(base: FormControl) {
-        const keys = Object.keys(base);
+        const keys = Object.keys(base)
 
         keys.forEach((key: string) => {
             if (!this.value) {
@@ -33,8 +32,7 @@ export class FormGroup {
         })
     }
 
-
     public get refs() {
-        return  Object.keys(this)
+        return Object.keys(this)
     }
 }
