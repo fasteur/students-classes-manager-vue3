@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import Home from '../views/Home.vue'
 import Main from '../views/Main.vue'
+import Auth from '../views/Auth.vue'
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -26,19 +27,29 @@ const routes: Array<RouteRecordRaw> = [
         ]
     },
     {
-        path: '/login',
-        name: 'Login', 
+        path: '/auth',
+        name: 'Auth',
         components: {
-            container: () => import('../views/Login.vue')
-        }
+            container: Auth,
+        },
+        children: [
+            {
+                path: '/login',
+                name: 'Login', 
+                components: {
+                    content: () => import('../views/Login.vue')
+                }
+            },
+            {
+                path: '/register',
+                name: 'Register', 
+                components: {
+                    content: () => import('../views/Register.vue')
+                }
+            }
+        ]
     },
-    {
-        path: '/register',
-        name: 'Register', 
-        components: {
-            container: () => import('../views/Register.vue')
-        }
-    }
+   
 ]
 
 const router = createRouter({

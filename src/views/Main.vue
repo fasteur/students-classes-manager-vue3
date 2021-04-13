@@ -16,21 +16,7 @@
                             <router-link to="/teacher-dashboard">{{ $t('APP.NAV.TEACHER_DASHBOARD') }}</router-link>
                         </el-menu-item>
                         <li class="ml-auto lang-dropdown">
-                            <el-dropdown class="lang-dropdown__text">
-                                <span class="el-dropdown-link">
-                                    {{ $t('APP.NAV.LANG.TITLE') }} <i class="el-icon-arrow-down el-icon--right"></i>
-                                </span>
-                                <template #dropdown>
-                                    <el-dropdown-menu>
-                                        <el-dropdown-item @click="activeLanguage('fr')">
-                                            {{ $t('APP.NAV.LANG.FR') }}
-                                        </el-dropdown-item>
-                                        <el-dropdown-item @click="activeLanguage('en')">
-                                            {{ $t('APP.NAV.LANG.EN') }}
-                                        </el-dropdown-item>
-                                    </el-dropdown-menu>
-                                </template>
-                            </el-dropdown>
+                            <LangDropdownComponent @changeLanguage="activeLanguage($event)"></LangDropdownComponent>
                         </li>
                     </el-menu>
                 </el-header>
@@ -46,8 +32,12 @@
 <script lang="ts">
 import { ref } from 'vue'
 import i18n from '@/i18n'
+import LangDropdownComponent from '@/components/utils/lang/LangDropdownComponent.vue'
 
 export default {
+    components: {
+        LangDropdownComponent
+    },
     props: [],
     setup() {
         let activeIndex = ref('1')

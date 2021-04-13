@@ -10,7 +10,7 @@
                     />
                 </el-form-item>
 
-                <el-form-item label="FirsName" :label-width="formLabelWidth">
+                <el-form-item label="First name" :label-width="formLabelWidth">
                     <el-input
                         type="text"
                         v-model="userForm.firstName"
