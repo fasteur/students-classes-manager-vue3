@@ -54,20 +54,20 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
 /* eslint-disable */
 import { ref, toRefs, watch, onMounted, computed } from 'vue'
 import i18n from '@/i18n';
 import { validators } from '@/utils/form/validator-rules'
 import { FormGroup } from '@/utils/form/form-group'
 
-// declare type RegisterFormPropeties = { 
-//     name: string,
-//     firstName: string,
-//     password: string,
-//     email: string,
-//     age: number
-// }
+declare type RegisterFormPropeties = { 
+    name: string,
+    firstName: string,
+    password: string,
+    email: string,
+    age: number
+}
 
 export default {
     props: ['form'],
@@ -116,7 +116,7 @@ export default {
             userForm.value = form.value
         })
 
-        watch(form, function (val) {
+        watch(form, function (val: RegisterFormPropeties) {
             userForm.value = val
         })
 
