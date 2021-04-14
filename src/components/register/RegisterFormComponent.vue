@@ -55,7 +55,6 @@
 </template>
 
 <script lang="ts">
-/* eslint-disable */
 import { ref, toRefs, watch, onMounted, computed } from 'vue'
 import i18n from '@/i18n';
 import { validators } from '@/utils/form/validator-rules'
