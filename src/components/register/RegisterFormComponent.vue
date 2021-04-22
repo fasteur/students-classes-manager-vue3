@@ -55,7 +55,7 @@
 </template>
 
 <script lang="ts">
-import { ref, toRefs, watch, onMounted, computed } from 'vue'
+import { ref, toRefs, watch, onMounted, computed, defineComponent, PropType } from 'vue'
 import i18n from '@/i18n';
 import { validators } from '@/utils/form/validator-rules'
 import { FormGroup } from '@/utils/form/form-group'
@@ -68,8 +68,13 @@ declare type RegisterFormPropeties = {
     age: number
 }
 
-export default {
-    props: ['form'],
+export default defineComponent({
+    props: {
+        form: {
+            type: Object as PropType<RegisterFormPropeties>,
+            default: null,
+        }
+    },
     emits: ['update:form'],
     setup(props, { emit }) {
         const translate =  i18n.global.t
@@ -130,7 +135,7 @@ export default {
             labels,
         }
     },
-}
+})
 </script>
 
 <style lang="scss">
