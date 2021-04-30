@@ -15,7 +15,6 @@ export default {
         const route = useRoute()
         onBeforeMount(() => {
             firebase.auth().onAuthStateChanged((user) => {
-                user = {}
                 if (!user) {
                     router.replace('/login')
                 } else if (route.path == "/login" || route.path == "/register") {

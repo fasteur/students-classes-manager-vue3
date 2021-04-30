@@ -59,9 +59,7 @@ export default defineComponent({
                         return
                     }
                     const newStudentList = studentListMappingFromDto(res.data)
-                    console.log('newStudentList: ', newStudentList);
                     studentList.value = [...newStudentList]
-                    console.log('studentList: ', studentList.value);
                 })
                 .catch((err) => console.log('err: ', err))
         }

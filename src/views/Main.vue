@@ -19,11 +19,28 @@
                                 $t('APP.NAV.TEACHER_DASHBOARD')
                             }}</router-link>
                         </el-menu-item>
-                        <li class="ml-auto lang-dropdown">
-                            <LangDropdownComponent
-                                @changeLanguage="activeLanguage($event)"
-                            ></LangDropdownComponent>
-                        </li>
+                        <div class="ml-auto r-space-between">
+                            <li class="lang-dropdown">
+                                <el-dropdown class="lang-dropdown__text">
+                                    <span class="el-dropdown-link">
+                                        <i class="el-icon-user el-icon--right"></i>
+                                    </span>
+                                    <template #dropdown>
+                                        <el-dropdown-menu>
+                                            <h3 class="px-2 test">{{ userName }}</h3>
+                                            <el-dropdown-item @click="logout()">
+                                                {{ $t('APP.NAV.USER_PROFILE.LOGOUT')}}
+                                            </el-dropdown-item>
+                                        </el-dropdown-menu>
+                                    </template>
+                                </el-dropdown>
+                            </li>
+                            <li class="lang-dropdown">
+                                <LangDropdownComponent
+                                    @changeLanguage="activeLanguage($event)"
+                                ></LangDropdownComponent>
+                            </li>
+                        </div>
                     </el-menu>
                 </el-header>
 
@@ -36,9 +53,10 @@
 </template>
 
 <script lang="ts">
-import { ref } from 'vue'
+import { onBeforeMount, ref } from 'vue'
 import i18n from '@/i18n'
 import LangDropdownComponent from '@/components/utils/lang/LangDropdownComponent.vue'
+import firebase from 'firebase'
 
 export default {
     components: {
@@ -47,21 +65,41 @@ export default {
     props: [],
     setup() {
         let activeIndex = ref('1')
+        const userName = ref('')
 
-        function activeLanguage(lang: string) {
+        // Lifecycle hooks
+        onBeforeMount(() => {
+            const user = (firebase.auth().currentUser) as any;
+            if (user) {
+                userName.value = user.email
+            }
+        })
+
+        // Methods
+        const activeLanguage = (lang: string) => {
             i18n.global.locale = lang
         }
 
-        function handleSelect(_: string, keyPath: string[]) {
+        const handleSelect = (_: string, keyPath: string[]) => {
             if (keyPath[0] !== '3') {
                 activeIndex.value = keyPath[0]
             }
+        }
+
+        const logout = () => {
+            firebase
+                .auth()
+                .signOut()
+                .then(() => console.log('Signed out!'))
+                .catch(err => alert(err.message))
         }
 
         return {
             activeLanguage,
             activeIndex,
             handleSelect,
+            userName,
+            logout
         }
     },
 }
@@ -105,5 +143,13 @@ export default {
     &__text {
         margin: l('spacing') / 1.5;
     }
+}
+
+.test {
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
 }
 </style>

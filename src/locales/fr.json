@@ -7,7 +7,10 @@
                 "FR": "FR",
                 "TITLE": "Langue"
             },
-            "TEACHER_DASHBOARD": "Tableau de bord"
+            "TEACHER_DASHBOARD": "Tableau de bord",
+            "USER_PROFILE": {
+                "LOGOUT": "Se déconnecter"
+            }
         }
     },
     "GENERAL": {
@@ -60,6 +63,7 @@
     "LOGIN": {
         "TITLE": "Se connecter",
         "NEED_TO_REGISTERED": "Besoin de s'inscrire?",
-        "REGISTER_HERE": "S'inscrire ici"
+        "REGISTER_HERE": "S'inscrire ici",
+        "BUTTON_LOGIN": "Se connecter"
     }
 }

@@ -16,6 +16,7 @@
 <script lang="ts">
 import { ref } from 'vue'
 import RegisterFormComponent from '@/components/register/RegisterFormComponent.vue'
+import firebase from 'firebase'
 
 export default {
     components: {
@@ -30,8 +31,11 @@ export default {
             age: 0,
         })
 
-        function submitForm() {
-            console.warn('TODO: Check form is valid & send it')
+        const submitForm = () => {
+            firebase
+                .auth()
+                .createUserWithEmailAndPassword(form.value.email, form.value.password)
+                .catch(err => alert(err.message))
         }
 
         return {
