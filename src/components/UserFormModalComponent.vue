@@ -61,20 +61,20 @@ export default {
         'update:showModal',
     ],
     setup(props, { emit }) {
-        // --- PROPS ---
+        // Props 
         const { user, showModal } = toRefs(props)
 
-        // --- DATAS ---
+        // Datas 
         const isEditMode = ref(false)
         const dialogFormVisible = ref(false)
 
-        // --- STATE ---
+        // State 
         const state: UserFormModalComponentDataState = reactive({
             formLabelWidth: '120px',
             form: { name: '', firstName: '', age: 0 }
         })
 
-        // --- WATCHERS ---
+        // Watchers 
         watch(user, function (val: User) {
             state.form = {
                 name: val.name,
@@ -95,8 +95,7 @@ export default {
             emit('update:showModal', val)
         })
 
-        // --- COMPUTEDS ---
-
+        // Computed Properties
         const errors = computed(() => {
             const errors = []
 
@@ -117,19 +116,16 @@ export default {
 
         const formIsValid = computed(() => !(errors.value.length > 0))
 
-        // --- FUNCTIONS ---
-
-        // USER
-        function addUser() {
+        // Methods: User
+        const addUser = () => {
             emit('addUserChange', getFormValue())
         }
-        function editUser() {
+        const editUser = () => {
             emit('editUserChange', getFormValue())
         }
 
-        // FORM
-
-        function getFormValue() {
+        // Methods: Form
+        const getFormValue = () => {
             const formValue = {
                 ...props.user,
                 ...state.form,
@@ -139,7 +135,7 @@ export default {
             return formValue
         }
 
-        function clearForm() {
+        const clearForm = () => {
             state.form = {
                 name: '',
                 firstName: '',
@@ -147,12 +143,12 @@ export default {
             }
         }
 
-        function resetForm() {
+        const resetForm = () => {
             clearForm()
             emit('resetFormChange')
         }
 
-        function submitForm() {
+        const submitForm = () => {
             if (formIsValid.value) {
                 if (!isEditMode.value) {
                     addUser()
@@ -164,12 +160,12 @@ export default {
             }
         }
 
-        // MODAL
-        function closeModal() {
+        // Methods: Modal
+        const closeModal = () => {
             dialogFormVisible.value = false
         }
 
-        function openModal() {
+        const openModal = () => {
             dialogFormVisible.value = true
         }
 

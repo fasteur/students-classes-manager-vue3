@@ -77,8 +77,13 @@ export default defineComponent({
     },
     emits: ['update:form'],
     setup(props, { emit }) {
+        // Injects
         const translate =  inject<(key: Path) => TranslateResult>('i18nTranslate')
+
+        // Props
         const { form } = toRefs(props)
+
+        // Datas
         const formLabelWidth = '20'
 
         const formGroup = new FormGroup({ 
@@ -106,6 +111,22 @@ export default defineComponent({
 
         const userForm = ref(formGroup.value);
         const rules = ref(formGroup.rules);
+
+        // LifeCycle Hooks
+        onMounted(() => {
+            userForm.value = form.value
+        })
+
+        // Watchers
+        watch(form, function (val: RegisterFormPropeties) {
+            userForm.value = val
+        })
+
+        watch(userForm, function (val) {
+            emit('update:form', val)
+        })
+
+        // Computed Properties
         const labels = computed(() => {
             return {
                 name: translate!('REGISTER_FORM.COLUMNS.NAME'),
@@ -114,18 +135,6 @@ export default defineComponent({
                 email: translate!('REGISTER_FORM.COLUMNS.EMAIL'),
                 age: translate!('REGISTER_FORM.COLUMNS.AGE'),
             }
-        })
-
-        onMounted(() => {
-            userForm.value = form.value
-        })
-
-        watch(form, function (val: RegisterFormPropeties) {
-            userForm.value = val
-        })
-
-        watch(userForm, function (val) {
-            emit('update:form', val)
         })
 
         return { 

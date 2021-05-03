@@ -23,7 +23,7 @@ export default {
         RegisterFormComponent,
     },
     setup() {
-        // Datas
+        // State
         const state = reactive({
             form: {
                 name: '',

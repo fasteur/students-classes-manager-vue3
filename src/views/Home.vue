@@ -42,7 +42,10 @@ export default defineComponent({
         UserFormModalComponent,
     },
     setup() {
-        // Datas
+        // Injects
+        const studentService = inject<StudentService>('studentService');
+
+        // State
         const state: HomeDataState = reactive({
             studentList: [] as Student[],
             student: new Student({}),
@@ -50,9 +53,7 @@ export default defineComponent({
             showModal: false,
         })
 
-        const studentService = inject<StudentService>('studentService');
-
-        // LifeCycle hooks
+        // LifeCycle Hooks
         onMounted(() => getStudents())
         
         // Methods

@@ -50,10 +50,11 @@ export default {
     props: ['form'],
     emits: ['update:form'],
     setup(props, { emit }) {
-        // Datas
+        // Injects
         const translate =  inject<(key: Path) => TranslateResult>('i18nTranslate')
+
+        // Props
         const { form } = toRefs(props)
-        const userForm: IKeyValue = ref({ name: '', firstName: '', age: 0 })
 
         // State
         const state: UserFormComponentDataState = reactive({
@@ -65,10 +66,15 @@ export default {
             formLabelWidth: '120px'
         })
 
+        // Datas
+        const userForm: IKeyValue = ref({ name: '', firstName: '', age: 0 })
+
+        // LifeCycle Hooks
         onMounted(() => {
             userForm.value = form.value
         })
 
+        // Watchers
         watch(form, function (val) {
             userForm.value = val
         })

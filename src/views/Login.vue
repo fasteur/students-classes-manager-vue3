@@ -23,7 +23,7 @@ export default {
         LoginFormComponent,
     },
     setup() {
-        // Datas
+        // State
         const state = reactive({
             form: {
                 password: '',

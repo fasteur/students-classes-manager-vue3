@@ -43,7 +43,10 @@ export default defineComponent({
     props: ['title', 'userList'],
     emits: ['editUserChanges', 'deleteUserChanges'],
     setup(_, { emit }) {
-        // Table properties
+        // Injects
+        const translate =  inject<(key: Path) => TranslateResult>('i18nTranslate')
+
+        // State
         const state: UserListComponentDataState = reactive({
             table: {
                 labelName: computed(() => translate!('USER_LIST.COLUMNS.NAME')),
@@ -51,8 +54,6 @@ export default defineComponent({
                 labelAge: computed(() => translate!('USER_LIST.COLUMNS.AGE')),
             }
         })
-
-        const translate =  inject<(key: Path) => TranslateResult>('i18nTranslate')
 
         // Emits: actions on user field
         const editUserChanges = (user: User): void => emit('editUserChanges', user)

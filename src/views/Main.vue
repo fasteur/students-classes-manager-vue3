@@ -64,13 +64,13 @@ export default {
     },
     props: [],
     setup() {
-        // Datas
+        // State
         const state = reactive({
             activeIndex: '1',
             userName: ''
         })
 
-        // Lifecycle hooks
+        // LifeCycle Hooks
         onBeforeMount(() => {
             const user = (firebase.auth().currentUser) as any;
             if (user) {
