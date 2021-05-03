@@ -55,10 +55,10 @@
 </template>
 
 <script lang="ts">
-import { ref, toRefs, watch, onMounted, computed, defineComponent, PropType } from 'vue'
-import i18n from '@/i18n';
+import { ref, toRefs, watch, onMounted, computed, defineComponent, PropType, inject } from 'vue'
 import { validators } from '@/utils/form/validator-rules'
 import { FormGroup } from '@/utils/form/form-group'
+import { Path, TranslateResult } from 'vue-i18n';
 
 declare type RegisterFormPropeties = { 
     name: string,
@@ -77,7 +77,7 @@ export default defineComponent({
     },
     emits: ['update:form'],
     setup(props, { emit }) {
-        const translate =  i18n.global.t
+        const translate =  inject<(key: Path) => TranslateResult>('i18nTranslate')
         const { form } = toRefs(props)
         const formLabelWidth = '20'
 
@@ -108,11 +108,11 @@ export default defineComponent({
         const rules = ref(formGroup.rules);
         const labels = computed(() => {
             return {
-                name: translate('REGISTER_FORM.COLUMNS.NAME'),
-                firstName: translate('REGISTER_FORM.COLUMNS.FIRST_NAME'),
-                password: translate('REGISTER_FORM.COLUMNS.PASSWORD'),
-                email: translate('REGISTER_FORM.COLUMNS.EMAIL'),
-                age: translate('REGISTER_FORM.COLUMNS.AGE'),
+                name: translate!('REGISTER_FORM.COLUMNS.NAME'),
+                firstName: translate!('REGISTER_FORM.COLUMNS.FIRST_NAME'),
+                password: translate!('REGISTER_FORM.COLUMNS.PASSWORD'),
+                email: translate!('REGISTER_FORM.COLUMNS.EMAIL'),
+                age: translate!('REGISTER_FORM.COLUMNS.AGE'),
             }
         })
 

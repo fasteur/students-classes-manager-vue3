@@ -3,18 +3,18 @@
         <h1 class="my-4">{{ $t('HOME.TITLE') }}</h1>
 
         <UserFormModalComponent
-            :user="student"
-            :title="formTitle"
-            :showModal="showModal"
+            :user="state.student"
+            :title="state.formTitle"
+            :showModal="state.showModal"
             @addUserChange="onAddStudent($event)"
             @editUserChange="onEditStudent($event)"
             @resetFormChange="onResetForm($event)"
-            v-model:showModal="showModal"
+            v-model:showModal="state.showModal"
         >
         </UserFormModalComponent>
 
         <UserListComponent
-            :user-list="studentList"
+            :user-list="state.studentList"
             @editUserChanges="opentEditForm($event)"
             @deleteUserChanges="onDeleteStudent($event)"
         >
@@ -23,67 +23,80 @@
 </template>
 
 <script lang="ts">
-import { ref, defineComponent, onMounted, Ref } from 'vue'
+import { defineComponent, onMounted, inject, reactive } from 'vue'
 import UserFormModalComponent from '@/components/UserFormModalComponent.vue'
 import UserListComponent from '@/components/UserListComponent.vue'
 import { Student, User } from '../models/index'
 import { UserDto } from '../models/interfaces/dto/user-dto.interface'
-import { studentService } from '../services/student.service'
+import { StudentService } from '../services/student.service'
 
+interface HomeDataState {
+    studentList: Student[]
+    student: Student
+    formTitle: string
+    showModal: boolean
+}
 export default defineComponent({
     components: {
         UserListComponent,
         UserFormModalComponent,
     },
     setup() {
-        let studentList: Ref<Student[]> = ref([] as Student[])
-        let student = ref(new Student({}))
-        const formTitle = 'STUDENT_FORM.TITLE'
-        let showModal = ref(false)
+        // Datas
+        const state: HomeDataState = reactive({
+            studentList: [] as Student[],
+            student: new Student({}),
+            formTitle: 'STUDENT_FORM.TITLE',
+            showModal: false,
+        })
 
+        const studentService = inject<StudentService>('studentService');
+
+        // LifeCycle hooks
         onMounted(() => getStudents())
         
-        function addStudent(data: Student): void {
-            studentService
+        // Methods
+        const addStudent = (data: Student): void => {
+            studentService!
                 .addStudent(data)
                 .then(() => getStudents())
                 .catch((err) => console.log('err: ', err))
         }
 
-        function getStudents(): void {
-            studentService
+        const getStudents = (): void => {
+            studentService!
                 .getStudents()
                 .then((res) => {
                     if (!res || !res.data) {
-                        studentList.value = []
+                        state.studentList = []
                         return
                     }
                     const newStudentList = studentListMappingFromDto(res.data)
-                    studentList.value = [...newStudentList]
+                    state.studentList = [...newStudentList]
                 })
                 .catch((err) => console.log('err: ', err))
         }
 
-        function onDeleteStudent(student: Student): void {
-            studentService
+        const onDeleteStudent = (student: Student): void => {
+            studentService!
                 .deleteStudent(student)
                 .then(() => getStudents())
                 .catch((err) => console.log('err: ', err))
         }
 
-        function editStudent(studentToEdit: Student): void {
-            studentService
+        const editStudent = (studentToEdit: Student): void => {
+            studentService!
                 .editStudent(studentToEdit)
                 .then(() => {
                     getStudents()
-                    student.value = new Student({})
+                    state.student = new Student({})
                 })
                 .catch((err) => console.log('err: ', err))
         }
 
         // Dto mapping
 
-        function studentListMappingFromDto(data: UserDto): Student[] {
+        const studentListMappingFromDto = (data: UserDto): Student[] => {
             return Object.keys(data).reduce((acc: Student[], curr: string) => {
                 acc.push(
                     new Student({
@@ -99,13 +112,13 @@ export default defineComponent({
 
         // Student form actions
 
-        function onAddStudent(newStudent: Student): void {
+        const onAddStudent = (newStudent: Student): void => {
             formIsValid(newStudent)
             if (isStudentAlreadyExist(newStudent)) return
             addStudent(newStudent)
         }
 
-        function onEditStudent(newStudent: Student): void {
+        const onEditStudent = (newStudent: Student): void => {
             formIsValid(newStudent)
             editStudent(newStudent)
         }
@@ -113,7 +126,7 @@ export default defineComponent({
         /**
          * @description check if all required form fields are filled
          */
-        function formIsValid(formValue: User) {
+        const formIsValid = (formValue: User) => {
             if (
                 !formValue ||
                 (formValue &&
@@ -125,17 +138,17 @@ export default defineComponent({
         /**
          * @description set student data & open form modal
          */
-        function opentEditForm(studentToEdit: Student): void {
-            student.value = new Student({ ...studentToEdit })
-            showModal.value = true
+        const opentEditForm = (studentToEdit: Student): void => {
+            state.student = new Student({ ...studentToEdit })
+            state.showModal = true
         }
 
-        function onResetForm() {
-            student.value = new Student({})
+        const onResetForm = () => {
+            state.student = new Student({})
         }
 
-        function isStudentAlreadyExist(newStudent: Student): boolean {
-            const alreadyExist = !!studentList.value.find(
+        const isStudentAlreadyExist = (newStudent: Student): boolean => {
+            const alreadyExist = !!state.studentList.find(
                 (student) =>
                     student.name == newStudent.name &&
                     student.age == newStudent.age
@@ -150,10 +163,7 @@ export default defineComponent({
             onEditStudent,
             opentEditForm,
             onResetForm,
-            student,
-            formTitle,
-            showModal,
-            studentList
+            state
         }
     },
 })

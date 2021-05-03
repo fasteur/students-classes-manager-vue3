@@ -1,7 +1,7 @@
 <template>
     <div class="container__wrapper">
         <h1>{{ $t('REGISTER.TITLE') }}</h1>
-        <RegisterFormComponent class="mt-4 mb-3" v-model:form="form"></RegisterFormComponent>
+        <RegisterFormComponent class="mt-4 mb-3" v-model:form="state.form"></RegisterFormComponent>
         <el-button
             native-type="submit"
             type="primary"
@@ -14,7 +14,7 @@
 </template>
 
 <script lang="ts">
-import { ref } from 'vue'
+import { reactive } from 'vue'
 import RegisterFormComponent from '@/components/register/RegisterFormComponent.vue'
 import firebase from 'firebase'
 
@@ -23,23 +23,27 @@ export default {
         RegisterFormComponent,
     },
     setup() {
-        const form = ref({
-            name: '',
-            firstName: '',
-            password: '',
-            email: '',
-            age: 0,
+        // Datas
+        const state = reactive({
+            form: {
+                name: '',
+                firstName: '',
+                password: '',
+                email: '',
+                age: 0,
+            }
         })
 
+        // Methods
         const submitForm = () => {
             firebase
                 .auth()
-                .createUserWithEmailAndPassword(form.value.email, form.value.password)
+                .createUserWithEmailAndPassword(state.form.email, state.form.password)
                 .catch(err => alert(err.message))
         }
 
         return {
-            form,
+            state,
             submitForm
         }
     },

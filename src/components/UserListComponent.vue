@@ -2,9 +2,9 @@
     <div class="user-list__container">
         <h3 class="float-left">{{ title }}</h3>
         <el-table :data="userList" style="width: 100%">
-            <el-table-column :label="labelName" prop="name"></el-table-column>
-            <el-table-column :label="labelFirstName" prop="firstName"></el-table-column>
-            <el-table-column :label="labelAge" prop="age"></el-table-column>
+            <el-table-column :label="state.table.labelName" prop="name"></el-table-column>
+            <el-table-column :label="state.table.labelFirstName" prop="firstName"></el-table-column>
+            <el-table-column :label="state.table.labelAge" prop="age"></el-table-column>
             <el-table-column align="right">
                 <template #header></template>
                 <template #default="scope">
@@ -27,18 +27,32 @@
 </template>
 
 <script lang="ts">
-import i18n from '@/i18n'
-import { computed, ComputedRef, defineComponent } from '@vue/runtime-core'
+import { computed, defineComponent } from '@vue/runtime-core'
+import { inject, reactive } from 'vue'
+import { Path, TranslateResult } from 'vue-i18n'
 import { User } from '../models'
 
+interface UserListComponentDataState {
+    table: {
+        labelName: string
+        labelFirstName: string
+        labelAge: string
+    }
+}
 export default defineComponent({
     props: ['title', 'userList'],
     emits: ['editUserChanges', 'deleteUserChanges'],
     setup(_, { emit }) {
         // Table properties
-        const labelName: ComputedRef<string> = computed(() => i18n.global.t('USER_LIST.COLUMNS.NAME'))
-        const labelFirstName: ComputedRef<string> = computed(() => i18n.global.t('USER_LIST.COLUMNS.FIRST_NAME'))
-        const labelAge: ComputedRef<string> = computed(() => i18n.global.t('USER_LIST.COLUMNS.AGE'))
+        const state: UserListComponentDataState = reactive({
+            table: {
+                labelName: computed(() => translate!('USER_LIST.COLUMNS.NAME')),
+                labelFirstName: computed(() => translate!('USER_LIST.COLUMNS.FIRST_NAME')),
+                labelAge: computed(() => translate!('USER_LIST.COLUMNS.AGE')),
+            }
+        })
+
+        const translate =  inject<(key: Path) => TranslateResult>('i18nTranslate')
 
         // Emits: actions on user field
         const editUserChanges = (user: User): void => emit('editUserChanges', user)
@@ -47,9 +61,7 @@ export default defineComponent({
         return {
             editUserChanges,
             deleteUserChanges,
-            labelAge,
-            labelName,
-            labelFirstName,
+            state
         }
     },
 })

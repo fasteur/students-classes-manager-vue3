@@ -4,7 +4,7 @@
             <el-container id="app">
                 <el-header id="nav">
                     <el-menu
-                        :default-active="activeIndex"
+                        :default-active="state.activeIndex"
                         class="el-menu-demo r-flex-start"
                         mode="horizontal"
                         @select="handleSelect"
@@ -27,7 +27,7 @@
                                     </span>
                                     <template #dropdown>
                                         <el-dropdown-menu>
-                                            <h3 class="px-2 test">{{ userName }}</h3>
+                                            <h3 class="px-2 test">{{ state.userName }}</h3>
                                             <el-dropdown-item @click="logout()">
                                                 {{ $t('APP.NAV.USER_PROFILE.LOGOUT')}}
                                             </el-dropdown-item>
@@ -53,10 +53,10 @@
 </template>
 
 <script lang="ts">
-import { onBeforeMount, ref } from 'vue'
+import { onBeforeMount, reactive } from 'vue'
 import i18n from '@/i18n'
-import LangDropdownComponent from '@/components/utils/lang/LangDropdownComponent.vue'
 import firebase from 'firebase'
+import LangDropdownComponent from '@/components/utils/lang/LangDropdownComponent.vue'
 
 export default {
     components: {
@@ -64,14 +64,17 @@ export default {
     },
     props: [],
     setup() {
-        let activeIndex = ref('1')
-        const userName = ref('')
+        // Datas
+        const state = reactive({
+            activeIndex: '1',
+            userName: ''
+        })
 
         // Lifecycle hooks
         onBeforeMount(() => {
             const user = (firebase.auth().currentUser) as any;
             if (user) {
-                userName.value = user.email
+                state.userName = user.email
             }
         })
 
@@ -82,7 +85,7 @@ export default {
 
         const handleSelect = (_: string, keyPath: string[]) => {
             if (keyPath[0] !== '3') {
-                activeIndex.value = keyPath[0]
+                state.activeIndex = keyPath[0]
             }
         }
 
@@ -90,15 +93,13 @@ export default {
             firebase
                 .auth()
                 .signOut()
-                .then(() => console.log('Signed out!'))
                 .catch(err => alert(err.message))
         }
 
         return {
             activeLanguage,
-            activeIndex,
             handleSelect,
-            userName,
+            state,
             logout
         }
     },

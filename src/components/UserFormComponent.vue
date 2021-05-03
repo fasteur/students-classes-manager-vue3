@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-form :model="userForm">
-            <el-form-item label="Nom" :label-width="formLabelWidth">
+            <el-form-item :label="state.labels.name" :label-width="state.formLabelWidth">
                 <el-input
                     type="text"
                     v-model="userForm.name"
@@ -10,7 +10,7 @@
                 />
             </el-form-item>
 
-            <el-form-item label="First name" :label-width="formLabelWidth">
+            <el-form-item :label="state.labels.firstName" :label-width="state.formLabelWidth">
                 <el-input
                     type="text"
                     v-model="userForm.firstName"
@@ -19,7 +19,7 @@
                 />
             </el-form-item>
 
-            <el-form-item label="Age" :label-width="formLabelWidth">
+            <el-form-item :label="state.labels.age" :label-width="state.formLabelWidth">
                 <el-input-number
                     v-model="userForm.age"
                     :min="0"
@@ -33,16 +33,37 @@
     </div>
 </template>
 
-<script>
-import { ref, toRefs, watch, onMounted } from 'vue'
+<script lang="ts">
+import { ref, toRefs, watch, onMounted, reactive, computed, inject } from 'vue'
+import { Path, TranslateResult } from 'vue-i18n'
+import { IKeyValue } from '../models/interfaces/key-value.interface'
 
+interface UserFormComponentDataState {
+    labels: {
+        name: string
+        firstName: string
+        age: string
+    },
+    formLabelWidth: string
+}
 export default {
     props: ['form'],
     emits: ['update:form'],
     setup(props, { emit }) {
-        const formLabelWidth = '120px'
+        // Datas
+        const translate =  inject<(key: Path) => TranslateResult>('i18nTranslate')
         const { form } = toRefs(props)
-        const userForm = ref({ name: '', firstName: '', age: 0 })
+        const userForm: IKeyValue = ref({ name: '', firstName: '', age: 0 })
+
+        // State
+        const state: UserFormComponentDataState = reactive({
+            labels: {
+                name: computed(() => translate!('USER_LIST.COLUMNS.NAME')),
+                firstName: computed(() => translate!('USER_LIST.COLUMNS.FIRST_NAME')),
+                age: computed(() => translate!('USER_LIST.COLUMNS.AGE')),
+            },
+            formLabelWidth: '120px'
+        })
 
         onMounted(() => {
             userForm.value = form.value
@@ -58,7 +79,7 @@ export default {
 
         return {
             userForm,
-            formLabelWidth,
+            state
         }
     },
 }

@@ -8,6 +8,7 @@ import ElementPlus from 'element-plus';
 import 'element-plus/lib/theme-chalk/index.css';
 import '@/assets/style.scss';
 import firebase from 'firebase';
+import { StudentService } from './services/student.service';
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
@@ -28,4 +29,6 @@ createApp(App)
     .use(router)
     .use(i18n)
     .use(ElementPlus, { i18n: i18n.global.t })
+    .provide('studentService', new StudentService())
+    .provide('i18nTranslate', i18n.global.t)
     .mount("#app");
