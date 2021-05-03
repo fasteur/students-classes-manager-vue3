@@ -3,7 +3,6 @@
         <h1>{{ $t('LOGIN.TITLE') }}</h1>
         <LoginFormComponent class="mt-4 mb-3" v-model:form="form"></LoginFormComponent>
         <el-button
-
             native-type="submit"
             type="primary"
             @click="submitForm()"

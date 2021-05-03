@@ -31,8 +31,4 @@ export class FormGroup {
             }
         })
     }
-
-    public get refs() {
-        return Object.keys(this)
-    }
 }
