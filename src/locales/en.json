@@ -1,36 +1,69 @@
 {
-  "APP": {
-    "NAV": {
-      "ABOUT": "About",
-      "HOME": "Home",
-      "LANG": {
-        "EN": "EN",
-        "FR": "FR",
-        "TITLE": "Language"
-      }
-    }
-  },
-  "GENERAL": {
-    "ADD": "Add",
-    "DELETE": "Delete",
-    "EDIT": "Edit",
-    "RESET": "Reset",
-    "SUBMIT": "Submit"
-  },
-  "TOAST": {
-    "ERROR": {
-      "MESSAGE": "Error status: {status}",
-      "TITLE": "Error"
-    }
-  },
-  "USER_FORM": {
-    "TITLE": "Add/Edit student"
-  },
-  "USER_LIST": {
-    "COLUMNS": {
-      "AGE": "Age",
-      "NAME": "Name"
+    "APP": {
+        "NAV": {
+            "HOME": "Home",
+            "LANG": {
+                "EN": "EN",
+                "FR": "FR",
+                "TITLE": "Language"
+            },
+            "TEACHER_DASHBOARD": "DASHBOARD",
+            "USER_PROFILE": {
+                "LOGOUT": "Logout"
+            }
+        }
     },
-    "TITLE": "Students list"
-  }
+    "GENERAL": {
+        "ADD": "Add",
+        "DELETE": "Delete",
+        "EDIT": "Edit",
+        "RESET": "Reset",
+        "SUBMIT": "Submit"
+    },
+    "HOME": {
+        "TITLE": "Students list"
+    },
+    "REGISTER_FORM": {
+        "COLUMNS": {
+            "AGE": "Age",
+            "EMAIL": "Email",
+            "FIRST_NAME": "First name",
+            "NAME": "Name",
+            "PASSWORD": "Password"
+        }
+    },
+    "STUDENT_FORM": {
+        "TITLE": "Add/Edit student"
+    },
+    "STUDENT_LIST": {
+        "TITLE": "Class: {className}"
+    },
+    "TOAST": {
+        "ERROR": {
+            "MESSAGE": "Error status: {status}",
+            "TITLE": "Error"
+        }
+    },
+    "USER_LIST": {
+        "COLUMNS": {
+            "AGE": "Age",
+            "FIRST_NAME": "First name",
+            "NAME": "Name"
+        }
+    },
+    "VALIDATOR": {
+        "EMAIL": "Please enter a valid email address",
+        "REQUIRED": "This field is required"
+    },
+    "REGISTER": {
+        "TITLE": "Register",
+        "ALREADY_REGISTER": "Already register?",
+        "LOGIN_HERE": "Login here"
+    },
+    "LOGIN": {
+        "TITLE": "Login",
+        "NEED_TO_REGISTERED": "Need to registered?",
+        "REGISTER_HERE": "Register here",
+        "BUTTON_LOGIN": "Login"
+    }
 }

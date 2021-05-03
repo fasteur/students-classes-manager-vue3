@@ -1,36 +1,69 @@
 {
-  "APP": {
-    "NAV": {
-      "ABOUT": "À propos",
-      "HOME": "Accueil",
-      "LANG": {
-        "EN": "EN",
-        "FR": "FR",
-        "TITLE": "Langue"
-      }
-    }
-  },
-  "GENERAL": {
-    "ADD": "Ajouter",
-    "DELETE": "Supprimer",
-    "EDIT": "Éditer",
-    "RESET": "Reset",
-    "SUBMIT": "Soumettre"
-  },
-  "TOAST": {
-    "ERROR": {
-      "MESSAGE": "Erreur statut: {status}",
-      "TITLE": "Erreur"
-    }
-  },
-  "USER_FORM": {
-    "TITLE": "Ajouter/Éditer un étudiant"
-  },
-  "USER_LIST": {
-    "COLUMNS": {
-      "AGE": "Âge",
-      "NAME": "Nom"
+    "APP": {
+        "NAV": {
+            "HOME": "Accueil",
+            "LANG": {
+                "EN": "EN",
+                "FR": "FR",
+                "TITLE": "Langue"
+            },
+            "TEACHER_DASHBOARD": "Tableau de bord",
+            "USER_PROFILE": {
+                "LOGOUT": "Se déconnecter"
+            }
+        }
     },
-    "TITLE": "Liste des étudiants"
-  }
+    "GENERAL": {
+        "ADD": "Ajouter",
+        "DELETE": "Supprimer",
+        "EDIT": "Éditer",
+        "RESET": "Reset",
+        "SUBMIT": "Soumettre"
+    },
+    "HOME": {
+        "TITLE": "Liste des étudiants"
+    },
+    "REGISTER_FORM": {
+        "COLUMNS": {
+            "AGE": "Âge",
+            "EMAIL": "Email",
+            "FIRST_NAME": "Prénom",
+            "NAME": "Nom",
+            "PASSWORD": "Mot de passe"
+        }
+    },
+    "STUDENT_FORM": {
+        "TITLE": "Ajouter/Éditer un étudiant"
+    },
+    "STUDENT_LIST": {
+        "TITLE": "Classe: {className}"
+    },
+    "TOAST": {
+        "ERROR": {
+            "MESSAGE": "Erreur statut: {status}",
+            "TITLE": "Erreur"
+        }
+    },
+    "USER_LIST": {
+        "COLUMNS": {
+            "AGE": "Âge",
+            "FIRST_NAME": "Prénom",
+            "NAME": "Nom"
+        }
+    },
+    "VALIDATOR": {
+        "EMAIL": "Veuillez entrer une adresse e-mail valide",
+        "REQUIRED": "Ce champs est requis"
+    },
+    "REGISTER": {
+        "TITLE": "S'inscrire",
+        "ALREADY_REGISTER": "Déjà inscrit?",
+        "LOGIN_HERE": "Connectez-vous ici"
+    },
+    "LOGIN": {
+        "TITLE": "Se connecter",
+        "NEED_TO_REGISTERED": "Besoin de s'inscrire?",
+        "REGISTER_HERE": "S'inscrire ici",
+        "BUTTON_LOGIN": "Se connecter"
+    }
 }

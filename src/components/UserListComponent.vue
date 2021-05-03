@@ -1,7 +1,9 @@
 <template>
     <div class="user-list__container">
+        <h3 class="float-left">{{ title }}</h3>
         <el-table :data="userList" style="width: 100%">
             <el-table-column :label="labelName" prop="name"></el-table-column>
+            <el-table-column :label="labelFirstName" prop="firstName"></el-table-column>
             <el-table-column :label="labelAge" prop="age"></el-table-column>
             <el-table-column align="right">
                 <template #header></template>
@@ -24,30 +26,33 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
 import i18n from '@/i18n'
-import { computed } from '@vue/runtime-core'
+import { computed, ComputedRef, defineComponent } from '@vue/runtime-core'
+import { User } from '../models'
 
-export default {
+export default defineComponent({
     props: ['title', 'userList'],
     emits: ['editUserChanges', 'deleteUserChanges'],
     setup(_, { emit }) {
         // Table properties
-        const labelName = computed(() => i18n.global.t('USER_LIST.COLUMNS.NAME'))
-        const labelAge = computed(() => i18n.global.t('USER_LIST.COLUMNS.AGE'))
+        const labelName: ComputedRef<string> = computed(() => i18n.global.t('USER_LIST.COLUMNS.NAME'))
+        const labelFirstName: ComputedRef<string> = computed(() => i18n.global.t('USER_LIST.COLUMNS.FIRST_NAME'))
+        const labelAge: ComputedRef<string> = computed(() => i18n.global.t('USER_LIST.COLUMNS.AGE'))
 
         // Emits: actions on user field
-        const editUserChanges = (user) => emit('editUserChanges', user)
-        const deleteUserChanges = (user) => emit('deleteUserChanges', user)
+        const editUserChanges = (user: User): void => emit('editUserChanges', user)
+        const deleteUserChanges = (user: User): void => emit('deleteUserChanges', user)
 
         return {
             editUserChanges,
             deleteUserChanges,
             labelAge,
             labelName,
+            labelFirstName,
         }
     },
-}
+})
 </script>
 
 <style lang="scss">
