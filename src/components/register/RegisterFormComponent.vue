@@ -55,10 +55,10 @@
 </template>
 
 <script lang="ts">
-import { ref, toRefs, watch, onMounted, computed, defineComponent, PropType } from 'vue'
-import i18n from '@/i18n';
+import { ref, toRefs, watch, onMounted, computed, defineComponent, PropType, inject } from 'vue'
 import { validators } from '@/utils/form/validator-rules'
 import { FormGroup } from '@/utils/form/form-group'
+import { Path, TranslateResult } from 'vue-i18n';
 
 declare type RegisterFormPropeties = { 
     name: string,
@@ -77,8 +77,13 @@ export default defineComponent({
     },
     emits: ['update:form'],
     setup(props, { emit }) {
-        const translate =  i18n.global.t
+        // Injects
+        const translate =  inject<(key: Path) => TranslateResult>('i18nTranslate')
+
+        // Props
         const { form } = toRefs(props)
+
+        // Datas
         const formLabelWidth = '20'
 
         const formGroup = new FormGroup({ 
@@ -106,26 +111,30 @@ export default defineComponent({
 
         const userForm = ref(formGroup.value);
         const rules = ref(formGroup.rules);
-        const labels = computed(() => {
-            return {
-                name: translate('REGISTER_FORM.COLUMNS.NAME'),
-                firstName: translate('REGISTER_FORM.COLUMNS.FIRST_NAME'),
-                password: translate('REGISTER_FORM.COLUMNS.PASSWORD'),
-                email: translate('REGISTER_FORM.COLUMNS.EMAIL'),
-                age: translate('REGISTER_FORM.COLUMNS.AGE'),
-            }
-        })
 
+        // LifeCycle Hooks
         onMounted(() => {
             userForm.value = form.value
         })
 
+        // Watchers
         watch(form, function (val: RegisterFormPropeties) {
             userForm.value = val
         })
 
         watch(userForm, function (val) {
             emit('update:form', val)
+        })
+
+        // Computed Properties
+        const labels = computed(() => {
+            return {
+                name: translate!('REGISTER_FORM.COLUMNS.NAME'),
+                firstName: translate!('REGISTER_FORM.COLUMNS.FIRST_NAME'),
+                password: translate!('REGISTER_FORM.COLUMNS.PASSWORD'),
+                email: translate!('REGISTER_FORM.COLUMNS.EMAIL'),
+                age: translate!('REGISTER_FORM.COLUMNS.AGE'),
+            }
         })
 
         return { 

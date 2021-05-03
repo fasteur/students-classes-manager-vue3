@@ -12,7 +12,7 @@
             v-model="dialogFormVisible"
             :append-to-body="true"
         >
-            <UserFormComponent v-model:form="form"></UserFormComponent>
+            <UserFormComponent v-model:form="state.form"></UserFormComponent>
 
             <template #footer>
                 <span class="dialog-footer">
@@ -38,9 +38,16 @@
     </div>
 </template>
 
-<script>
-import { computed, ref, watch, toRefs } from 'vue'
+<script lang="ts">
+import { computed, ref, watch, toRefs, reactive } from 'vue'
 import UserFormComponent from '@/components/UserFormComponent.vue'
+import { User } from '../models'
+import { IKeyValue } from '../models/interfaces/key-value.interface'
+
+interface UserFormModalComponentDataState {
+    formLabelWidth: string
+    form: IKeyValue
+}
 
 export default {
     components: {
@@ -54,18 +61,22 @@ export default {
         'update:showModal',
     ],
     setup(props, { emit }) {
-        // --- PROPS ---
+        // Props 
         const { user, showModal } = toRefs(props)
 
-        // --- DATAS ---
-        const dialogFormVisible = ref(false)
-        const formLabelWidth = ref('120px')
+        // Datas 
         const isEditMode = ref(false)
-        const form = ref({ name: '', firstName: '', age: 0 })
+        const dialogFormVisible = ref(false)
 
-        // --- WATCHERS ---
-        watch(user, function (val) {
-            form.value = {
+        // State 
+        const state: UserFormModalComponentDataState = reactive({
+            formLabelWidth: '120px',
+            form: { name: '', firstName: '', age: 0 }
+        })
+
+        // Watchers 
+        watch(user, function (val: User) {
+            state.form = {
                 name: val.name,
                 firstName: val.firstName,
                 age: val.age,
@@ -73,7 +84,7 @@ export default {
             isEditMode.value = formIsValid.value
         })
 
-        watch(showModal, function (val) {
+        watch(showModal, function (val: boolean) {
             if (!val) {
                 resetForm()
             }
@@ -84,21 +95,20 @@ export default {
             emit('update:showModal', val)
         })
 
-        // --- COMPUTEDS ---
-
+        // Computed Properties
         const errors = computed(() => {
             const errors = []
 
-            if (!form.value.name) {
+            if (!state.form.name) {
                 errors.push('Name field is required!')
             }
-            if (!form.value.firstName) {
+            if (!state.form.firstName) {
                 errors.push('First field is required!')
             }
-            if (!form.value.age) {
+            if (!state.form.age) {
                 errors.push('Age is required!')
             }
-            if (typeof form.value.age !== 'number') {
+            if (typeof state.form.age !== 'number') {
                 errors.push('Age is a number!')
             }
             return errors
@@ -106,42 +116,39 @@ export default {
 
         const formIsValid = computed(() => !(errors.value.length > 0))
 
-        // --- FUNCTIONS ---
-
-        // USER
-        function addUser() {
+        // Methods: User
+        const addUser = () => {
             emit('addUserChange', getFormValue())
         }
-        function editUser() {
+        const editUser = () => {
             emit('editUserChange', getFormValue())
         }
 
-        // FORM
-
-        function getFormValue() {
+        // Methods: Form
+        const getFormValue = () => {
             const formValue = {
                 ...props.user,
-                ...form.value,
+                ...state.form,
             }
             formValue.name.toString().trim()
             formValue.firstName.toString().trim()
             return formValue
         }
 
-        function clearForm() {
-            form.value = {
+        const clearForm = () => {
+            state.form = {
                 name: '',
                 firstName: '',
-                age: null,
+                age: 0,
             }
         }
 
-        function resetForm() {
+        const resetForm = () => {
             clearForm()
             emit('resetFormChange')
         }
 
-        function submitForm() {
+        const submitForm = () => {
             if (formIsValid.value) {
                 if (!isEditMode.value) {
                     addUser()
@@ -153,23 +160,22 @@ export default {
             }
         }
 
-        // MODAL
-        function closeModal() {
+        // Methods: Modal
+        const closeModal = () => {
             dialogFormVisible.value = false
         }
 
-        function openModal() {
+        const openModal = () => {
             dialogFormVisible.value = true
         }
 
         return {
             submitForm,
             formIsValid,
-            form,
             resetForm,
-            formLabelWidth,
-            dialogFormVisible,
+            state,
             openModal,
+            dialogFormVisible
         }
     },
 }

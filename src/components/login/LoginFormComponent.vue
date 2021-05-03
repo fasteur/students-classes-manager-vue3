@@ -25,10 +25,10 @@
 </template>
 
 <script lang="ts">
-import { ref, toRefs, watch, onMounted, computed, defineComponent, PropType } from 'vue'
-import i18n from '@/i18n';
+import { ref, toRefs, watch, onMounted, computed, defineComponent, PropType, inject } from 'vue'
 import { validators } from '@/utils/form/validator-rules'
 import { FormGroup } from '@/utils/form/form-group'
+import { Path, TranslateResult } from 'vue-i18n';
 
 declare type LoginFormPropeties = { 
     password: string,
@@ -44,10 +44,14 @@ export default defineComponent({
     },
     emits: ['update:form'],
     setup(props, { emit }) {
-        const translate =  i18n.global.t
-        const { form } = toRefs(props)
-        const formLabelWidth = '20'
+        // Inject
+        const translate =  inject<(key: Path) => TranslateResult>('i18nTranslate')
 
+        // Props
+        const { form } = toRefs(props)
+
+        // Datas
+        const formLabelWidth = '20'
         const formGroup = new FormGroup({ 
             password: {
                 value: '',
@@ -58,26 +62,29 @@ export default defineComponent({
                 rules: [validators.required(), validators.email()],
             },
         });
-
         const userForm = ref(formGroup.value);
         const rules = ref(formGroup.rules);
-        const labels = computed(() => {
-            return {
-                password: translate('REGISTER_FORM.COLUMNS.PASSWORD'),
-                email: translate('REGISTER_FORM.COLUMNS.EMAIL'),
-            }
-        })
 
+        // LifeCycle Hooks
         onMounted(() => {
             userForm.value = form.value
         })
 
+        // Watchers
         watch(form, function (val: LoginFormPropeties) {
             userForm.value = val
         })
 
         watch(userForm, function (val) {
             emit('update:form', val)
+        })
+
+        // Computed Properties
+        const labels = computed(() => {
+            return {
+                password: translate!('REGISTER_FORM.COLUMNS.PASSWORD'),
+                email: translate!('REGISTER_FORM.COLUMNS.EMAIL'),
+            }
         })
 
         return { 

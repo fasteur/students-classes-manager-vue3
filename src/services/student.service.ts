@@ -2,7 +2,7 @@ import { AxiosResponse } from 'axios'
 import { Student } from '../models'
 import { myAxios } from '../api/axios'
 
-class StudentService {
+export class StudentService {
     public getStudents(): Promise<AxiosResponse<any>> {
         return myAxios.get('/students.json')
     }
@@ -24,4 +24,4 @@ class StudentService {
     }
 }
 
-export const studentService = new StudentService()
+
