@@ -39,28 +39,49 @@
 </template>
 
 <script lang="ts">
-import { computed, ref, watch, toRefs, reactive } from 'vue'
+import { computed, ref, watch, toRefs, reactive, PropType } from 'vue'
 import UserFormComponent from '@/components/UserFormComponent.vue'
-import { User } from '../models'
+import { Student, User } from '../models'
 import { IKeyValue } from '../models/interfaces/key-value.interface'
 
 interface UserFormModalComponentDataState {
     formLabelWidth: string
     form: IKeyValue
 }
+interface UserFormModalComponentProps {
+    title: string,
+    user: Student,
+    showModal: boolean
+}
+interface UserFormModalComponentEmits {
+    emit: (event: "addUserChange"|"editUserChange"|"resetFormChange"|"update:showModal", ...args: any[]) => void
+}
 
 export default {
     components: {
         UserFormComponent,
     },
-    props: ['title', 'user', 'showModal'],
+    props: {
+        title: {
+            type: Object as PropType<string>,
+            default: null,
+        },
+        user: {
+            type: Object as PropType<Student>,
+            default: null,
+        },
+        showModal: {
+            type: Object as PropType<boolean>,
+            default: null,
+        },
+    },
     emits: [
         'addUserChange',
         'editUserChange',
         'resetFormChange',
         'update:showModal',
     ],
-    setup(props, { emit }) {
+    setup(props: Readonly<UserFormModalComponentProps>, { emit }: UserFormModalComponentEmits) {
         // Props 
         const { user, showModal } = toRefs(props)
 

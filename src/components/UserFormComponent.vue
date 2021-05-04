@@ -34,7 +34,7 @@
 </template>
 
 <script lang="ts">
-import { ref, toRefs, watch, onMounted, reactive, computed, inject } from 'vue'
+import { ref, toRefs, watch, onMounted, reactive, computed, inject, PropType } from 'vue'
 import { Path, TranslateResult } from 'vue-i18n'
 import { IKeyValue } from '../models/interfaces/key-value.interface'
 
@@ -46,10 +46,24 @@ interface UserFormComponentDataState {
     },
     formLabelWidth: string
 }
+
+interface UserFormComponentProps {
+    form: IKeyValue
+}
+
+interface UserFormComponentEmits {
+    emit: (event: "update:form", ...args: any[]) => void
+}
+
 export default {
-    props: ['form'],
+    props: {
+        form: {
+            type: Object as PropType<IKeyValue>,
+            default: null,
+        }
+    },
     emits: ['update:form'],
-    setup(props, { emit }) {
+    setup(props: Readonly<UserFormComponentProps>, { emit }: UserFormComponentEmits) {
         // Injects
         const translate =  inject<(key: Path) => TranslateResult>('i18nTranslate')
 
