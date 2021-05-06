@@ -40,13 +40,13 @@
 
 <script lang="ts">
 import { computed, ref, watch, toRefs, reactive, PropType } from 'vue'
-import UserFormComponent from '@/components/UserFormComponent.vue'
+import UserFormComponent, { UserForm } from '@/components/UserFormComponent.vue'
 import { Student, User } from '../models'
 import { IKeyValue } from '../models/interfaces/key-value.interface'
 
 interface UserFormModalComponentDataState {
     formLabelWidth: string
-    form: IKeyValue
+    form: UserForm
 }
 interface UserFormModalComponentProps {
     title: string,
@@ -83,7 +83,7 @@ export default {
     ],
     setup(props: Readonly<UserFormModalComponentProps>, { emit }: UserFormModalComponentEmits) {
         // Props 
-        const { user, showModal, title } = toRefs(props)
+        const { user, showModal } = toRefs(props)
 
         // Datas 
         const isEditMode = ref(false)

@@ -1,27 +1,27 @@
 <template>
     <div>
-        <el-form :model="userForm">
-            <el-form-item :label="state.labels.name" :label-width="state.formLabelWidth">
+        <el-form :model="state.userForm">
+            <el-form-item :label="labels.name" :label-width="state.formLabelWidth">
                 <el-input
                     type="text"
-                    v-model="userForm.name"
+                    v-model="state.userForm.name"
                     placeholder="Ex: Asteur"
                     clearable
                 />
             </el-form-item>
 
-            <el-form-item :label="state.labels.firstName" :label-width="state.formLabelWidth">
+            <el-form-item :label="labels.firstName" :label-width="state.formLabelWidth">
                 <el-input
                     type="text"
-                    v-model="userForm.firstName"
+                    v-model="state.userForm.firstName"
                     placeholder="Ex: Florian"
                     clearable
                 />
             </el-form-item>
 
-            <el-form-item :label="state.labels.age" :label-width="state.formLabelWidth">
+            <el-form-item :label="labels.age" :label-width="state.formLabelWidth">
                 <el-input-number
-                    v-model="userForm.age"
+                    v-model="state.userForm.age"
                     :min="0"
                     :max="120"
                     label="age"
@@ -34,21 +34,22 @@
 </template>
 
 <script lang="ts">
-import { ref, toRefs, watch, onMounted, reactive, computed, inject, PropType } from 'vue'
+import { toRefs, watch, onMounted, reactive, computed, inject, PropType } from 'vue'
 import { Path, TranslateResult } from 'vue-i18n'
-import { IKeyValue } from '../models/interfaces/key-value.interface'
+
+export interface UserForm {
+    name: string
+    firstName: string
+    age: number
+}
 
 interface UserFormComponentDataState {
-    labels: {
-        name: string
-        firstName: string
-        age: string
-    },
+    userForm: UserForm,
     formLabelWidth: string
 }
 
 interface UserFormComponentProps {
-    form: IKeyValue
+    form: UserForm
 }
 
 interface UserFormComponentEmits {
@@ -58,7 +59,7 @@ interface UserFormComponentEmits {
 export default {
     props: {
         form: {
-            type: Object as PropType<IKeyValue>,
+            type: Object as PropType<UserForm>,
             default: null,
         }
     },
@@ -72,34 +73,40 @@ export default {
 
         // State
         const state: UserFormComponentDataState = reactive({
-            labels: {
-                name: computed(() => translate!('USER_LIST.COLUMNS.NAME')),
-                firstName: computed(() => translate!('USER_LIST.COLUMNS.FIRST_NAME')),
-                age: computed(() => translate!('USER_LIST.COLUMNS.AGE')),
+            userForm: {
+                name: '',
+                firstName: '', 
+                age: 0
             },
             formLabelWidth: '120px'
         })
 
-        // Datas
-        const userForm: IKeyValue = ref({ name: '', firstName: '', age: 0 })
+        // Computed Properties
+        const labels = computed(() => {
+            return {
+                name: translate!('USER_LIST.COLUMNS.NAME'),
+                firstName: translate!('USER_LIST.COLUMNS.FIRST_NAME'),
+                age: translate!('USER_LIST.COLUMNS.AGE'),
+            }
+        })
 
         // LifeCycle Hooks
         onMounted(() => {
-            userForm.value = form.value
+            state.userForm = form.value
         })
 
         // Watchers
-        watch(form, function (val) {
-            userForm.value = val
+        watch(form, function (val: UserForm) {
+            state.userForm = val
         })
 
-        watch(userForm, function (val) {
+        watch(state.userForm, function (val: UserForm) {
             emit('update:form', val)
         })
 
         return {
-            userForm,
-            state
+            state,
+            labels
         }
     },
 }
