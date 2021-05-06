@@ -63,16 +63,16 @@ export default {
     },
     props: {
         title: {
-            type: Object as PropType<string>,
-            default: null,
+            type: String,
+            default: 'STUDENT_FORM.TITLE',
         },
         user: {
             type: Object as PropType<Student>,
             default: null,
         },
         showModal: {
-            type: Object as PropType<boolean>,
-            default: null,
+            type: Boolean,
+            default: false,
         },
     },
     emits: [
@@ -83,7 +83,7 @@ export default {
     ],
     setup(props: Readonly<UserFormModalComponentProps>, { emit }: UserFormModalComponentEmits) {
         // Props 
-        const { user, showModal } = toRefs(props)
+        const { user, showModal, title } = toRefs(props)
 
         // Datas 
         const isEditMode = ref(false)
@@ -196,7 +196,7 @@ export default {
             resetForm,
             state,
             openModal,
-            dialogFormVisible
+            dialogFormVisible,
         }
     },
 }

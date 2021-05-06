@@ -1,47 +1,38 @@
 <template>
     <div class="login">
         <h1>{{ $t('LOGIN.TITLE') }}</h1>
-        <LoginFormComponent class="mt-4 mb-3" v-model:form="state.form"></LoginFormComponent>
-        <el-button
-            native-type="submit"
-            type="primary"
-            @click="submitForm()"
-        >
-            {{ $t('LOGIN.BUTTON_LOGIN') }}
-        </el-button>
-        <p class="mt-3">{{ $t('LOGIN.NEED_TO_REGISTERED') }} <router-link to="/register">{{ $t('LOGIN.REGISTER_HERE') }}</router-link></p>
+        <LoginFormComponent
+            class="mt-4 mb-3"
+            @submit-form="onSubmitForm"
+        ></LoginFormComponent>
+        <p class="mt-3">
+            {{ $t('LOGIN.NEED_TO_REGISTERED') }}
+            <router-link to="/register">{{ $t('LOGIN.REGISTER_HERE') }}</router-link>
+        </p>
     </div>
 </template>
 
 <script lang="ts">
-import { reactive } from 'vue'
 import firebase from 'firebase'
 import LoginFormComponent from '@/components/login/LoginFormComponent.vue'
+import { LoginFormComponentFormProperties } from '@/components/login/LoginFormComponent.vue'
 
 export default {
     components: {
         LoginFormComponent,
     },
     setup() {
-        // State
-        const state = reactive({
-            form: {
-                password: '',
-                email: '',
-            }
-        })
 
         // Methods
-        const submitForm = () => {
+        const onSubmitForm = (value: LoginFormComponentFormProperties) => {
             firebase
                 .auth()
-                .signInWithEmailAndPassword(state.form.email, state.form.password)
+                .signInWithEmailAndPassword(value.email, value.password)
                 .catch(err => alert(err.message))
         }
 
         return {
-            state,
-            submitForm
+            onSubmitForm,
         }
     },
 }
@@ -49,3 +40,4 @@ export default {
 <style lang="scss">
 @import '@/assets/style.scss';
 </style>
+
