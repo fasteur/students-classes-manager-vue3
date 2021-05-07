@@ -33,7 +33,7 @@
 
             <el-form-item :label="labels.age" :label-width="state.formLabelWidth" required>
                 <el-input-number
-                    v-model="state.userForm.age"
+                    v-model.number="state.userForm.age"
                     :min="0"
                     :max="120"
                     label="age"
@@ -144,7 +144,7 @@ export default {
 
         // LifeCycle Hooks
         onMounted(() => {
-            if (!form.value || (form.value && (!form.value.name || !form.value.firstName || !form.value.age))) {
+            if (!form.value || (form.value && (!form.value.name || !form.value.firstName ))) {
                 return
             } 
             const { name, firstName, age } = form.value

@@ -46,7 +46,8 @@ import { Student, User } from '../models'
 
 interface UserFormModalComponentDataState {
     formLabelWidth: string
-    form: UserForm
+    form: UserForm,
+    isEditMode: boolean
 }
 interface UserFormModalComponentProps {
     title: string,
@@ -89,7 +90,6 @@ export default {
         const { user, showModal } = toRefs(props)
 
         // Datas 
-        const isEditMode = ref(false)
         const dialogFormVisible = ref(false)
         const formIsValid = ref(false)
         const resetForm = ref(false)
@@ -97,7 +97,8 @@ export default {
         // State 
         const state: UserFormModalComponentDataState = reactive({
             formLabelWidth: '120px',
-            form: { name: '', firstName: '', age: 0 }
+            form: { name: '', firstName: '', age: 0 },
+            isEditMode: false,
         })
 
         // Watchers 
@@ -107,10 +108,13 @@ export default {
                 firstName: val.firstName,
                 age: val.age,
             }
-            isEditMode.value = !!val
+            state.isEditMode = !!val
         })
 
         watch(showModal, function (val: boolean) {
+            if (!val) {
+                clearForm()
+            }
             dialogFormVisible.value = val
         })
 
@@ -147,13 +151,19 @@ export default {
 
         const submitForm = () => {
             if (formIsValid.value) {
-                if (!isEditMode.value) {
+                if (!state.isEditMode) {
                     addUser()
-                } else if (isEditMode.value) {
+                } else if (state.isEditMode) {
                     editUser()
                 }
                 closeModal()
             }
+        }
+
+        const clearForm = () => {
+            state.form.name = ''
+            state.form.firstName = ''
+            state.form.age = 0
         }
 
         // Methods: Modal

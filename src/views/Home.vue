@@ -31,7 +31,7 @@
 import { defineComponent, onMounted, inject, reactive } from 'vue'
 import UserFormModalComponent from '@/components/UserFormModalComponent.vue'
 import UserListComponent from '@/components/UserListComponent.vue'
-import { Student, User } from '../models/index'
+import { Student } from '../models/index'
 import { UserDto } from '../models/interfaces/dto/user-dto.interface'
 import { StudentService } from '../services/student.service'
 
@@ -93,7 +93,6 @@ export default defineComponent({
         }
 
         const editStudent = (studentToEdit: Student): void => {
-            console.log('studentToEdit: ', studentToEdit);
             studentService!
                 .editStudent(studentToEdit)
                 .then(() => {
@@ -104,7 +103,6 @@ export default defineComponent({
         }
 
         // Dto mapping
-
         const studentListMappingFromDto = (data: UserDto): Student[] => {
             return Object.keys(data).reduce((acc: Student[], curr: string) => {
                 acc.push(
@@ -120,10 +118,8 @@ export default defineComponent({
         }
 
         // Student form actions
-
         const onAddStudent = (newStudent: Student): void => {
             if (!state.formIsValid) return
-            if (isStudentAlreadyExist(newStudent)) return
             addStudent(newStudent)
         }
 
@@ -139,8 +135,6 @@ export default defineComponent({
             state.student = new Student({ ...studentToEdit })
             state.showModal = true
         }
-
-        const isStudentAlreadyExist = (newStudent: Student): boolean => !!state.studentList.find((student) => student.name == newStudent.id)
 
         const openModal = () => {
             state.showModal = true
