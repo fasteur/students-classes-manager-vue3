@@ -1,22 +1,22 @@
 <template>
     <div>
-        <el-button
-            class="float-right mr-3"
-            type="primary"
-            @click="openModal()"
-            >{{ $t('GENERAL.ADD') }}</el-button
-        >
-
         <el-dialog
             :title="$t(title)"
             v-model="dialogFormVisible"
             :append-to-body="true"
+            :destroy-on-close="true"
         >
-            <UserFormComponent v-model:form="state.form"></UserFormComponent>
-
+            <UserFormComponent 
+                v-model:formIsValid="formIsValid" 
+                v-model:form="state.form"
+                :resetForm="resetForm"
+                @update:resetForm="setResetForm(false)"
+            >
+            </UserFormComponent>
             <template #footer>
                 <span class="dialog-footer">
                     <el-button
+                        :disabled="!formIsValid"
                         :class="{ active: formIsValid, disabled: !formIsValid }"
                         native-type="submit"
                         type="primary"
@@ -25,10 +25,11 @@
                         {{ $t('GENERAL.SUBMIT') }}
                     </el-button>
                     <el-button
+                        :disabled="!formIsValid"
                         native-type="button"
                         type="primary"
                         plain
-                        @click="resetForm()"
+                        @click="setResetForm(true)"
                     >
                         {{ $t('GENERAL.RESET') }}
                     </el-button>
@@ -39,10 +40,9 @@
 </template>
 
 <script lang="ts">
-import { computed, ref, watch, toRefs, reactive, PropType } from 'vue'
+import { ref, watch, toRefs, reactive, PropType } from 'vue'
 import UserFormComponent, { UserForm } from '@/components/UserFormComponent.vue'
 import { Student, User } from '../models'
-import { IKeyValue } from '../models/interfaces/key-value.interface'
 
 interface UserFormModalComponentDataState {
     formLabelWidth: string
@@ -51,10 +51,13 @@ interface UserFormModalComponentDataState {
 interface UserFormModalComponentProps {
     title: string,
     user: Student,
-    showModal: boolean
+    showModal: boolean,
 }
 interface UserFormModalComponentEmits {
-    emit: (event: "addUserChange"|"editUserChange"|"resetFormChange"|"update:showModal", ...args: any[]) => void
+    emit: (
+        event: "addUserChange"|"editUserChange"|"update:showModal"|"update:formIsValid",
+        ...args: any[]
+    ) => void
 }
 
 export default {
@@ -78,8 +81,8 @@ export default {
     emits: [
         'addUserChange',
         'editUserChange',
-        'resetFormChange',
         'update:showModal',
+        'update:formIsValid'
     ],
     setup(props: Readonly<UserFormModalComponentProps>, { emit }: UserFormModalComponentEmits) {
         // Props 
@@ -88,6 +91,8 @@ export default {
         // Datas 
         const isEditMode = ref(false)
         const dialogFormVisible = ref(false)
+        const formIsValid = ref(false)
+        const resetForm = ref(false)
 
         // State 
         const state: UserFormModalComponentDataState = reactive({
@@ -102,13 +107,10 @@ export default {
                 firstName: val.firstName,
                 age: val.age,
             }
-            isEditMode.value = formIsValid.value
+            isEditMode.value = !!val
         })
 
         watch(showModal, function (val: boolean) {
-            if (!val) {
-                resetForm()
-            }
             dialogFormVisible.value = val
         })
 
@@ -116,26 +118,9 @@ export default {
             emit('update:showModal', val)
         })
 
-        // Computed Properties
-        const errors = computed(() => {
-            const errors = []
-
-            if (!state.form.name) {
-                errors.push('Name field is required!')
-            }
-            if (!state.form.firstName) {
-                errors.push('First field is required!')
-            }
-            if (!state.form.age) {
-                errors.push('Age is required!')
-            }
-            if (typeof state.form.age !== 'number') {
-                errors.push('Age is a number!')
-            }
-            return errors
+        watch(formIsValid, function (val) {
+            emit("update:formIsValid", val)
         })
-
-        const formIsValid = computed(() => !(errors.value.length > 0))
 
         // Methods: User
         const addUser = () => {
@@ -156,17 +141,8 @@ export default {
             return formValue
         }
 
-        const clearForm = () => {
-            state.form = {
-                name: '',
-                firstName: '',
-                age: 0,
-            }
-        }
-
-        const resetForm = () => {
-            clearForm()
-            emit('resetFormChange')
+        const setResetForm = (value: boolean) => {
+            resetForm.value = value
         }
 
         const submitForm = () => {
@@ -176,7 +152,6 @@ export default {
                 } else if (isEditMode.value) {
                     editUser()
                 }
-                resetForm()
                 closeModal()
             }
         }
@@ -186,17 +161,13 @@ export default {
             dialogFormVisible.value = false
         }
 
-        const openModal = () => {
-            dialogFormVisible.value = true
-        }
-
         return {
             submitForm,
             formIsValid,
             resetForm,
             state,
-            openModal,
             dialogFormVisible,
+            setResetForm,
         }
     },
 }

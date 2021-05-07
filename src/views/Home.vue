@@ -1,14 +1,19 @@
 <template>
     <div class="home">
         <h1 class="my-4">{{ $t('HOME.TITLE') }}</h1>
-
+        <el-button
+            class="float-right mr-3"
+            type="primary"
+            @click="openModal()"
+            >{{ $t('GENERAL.ADD') }}</el-button
+        >
         <UserFormModalComponent
             :user="state.student"
             :title="state.formTitle"
             :showModal="state.showModal"
+            v-model:formIsValid="state.formIsValid"
             @addUserChange="onAddStudent($event)"
             @editUserChange="onEditStudent($event)"
-            @resetFormChange="onResetForm($event)"
             v-model:showModal="state.showModal"
         >
         </UserFormModalComponent>
@@ -34,7 +39,8 @@ interface HomeDataState {
     studentList: Student[]
     student: Student
     formTitle: string
-    showModal: boolean
+    showModal: boolean,
+    formIsValid: boolean
 }
 export default defineComponent({
     components: {
@@ -51,6 +57,7 @@ export default defineComponent({
             student: new Student({}),
             formTitle: 'STUDENT_FORM.TITLE',
             showModal: false,
+            formIsValid: false
         })
 
         // LifeCycle Hooks
@@ -86,6 +93,7 @@ export default defineComponent({
         }
 
         const editStudent = (studentToEdit: Student): void => {
+            console.log('studentToEdit: ', studentToEdit);
             studentService!
                 .editStudent(studentToEdit)
                 .then(() => {
@@ -114,26 +122,14 @@ export default defineComponent({
         // Student form actions
 
         const onAddStudent = (newStudent: Student): void => {
-            formIsValid(newStudent)
+            if (!state.formIsValid) return
             if (isStudentAlreadyExist(newStudent)) return
             addStudent(newStudent)
         }
 
         const onEditStudent = (newStudent: Student): void => {
-            formIsValid(newStudent)
+            if (!state.formIsValid) return
             editStudent(newStudent)
-        }
-
-        /**
-         * @description check if all required form fields are filled
-         */
-        const formIsValid = (formValue: User) => {
-            if (
-                !formValue ||
-                (formValue &&
-                    !(formValue.name || formValue.age || formValue.firstName))
-            )
-                return
         }
 
         /**
@@ -144,17 +140,10 @@ export default defineComponent({
             state.showModal = true
         }
 
-        const onResetForm = () => {
-            state.student = new Student({})
-        }
+        const isStudentAlreadyExist = (newStudent: Student): boolean => !!state.studentList.find((student) => student.name == newStudent.id)
 
-        const isStudentAlreadyExist = (newStudent: Student): boolean => {
-            const alreadyExist = !!state.studentList.find(
-                (student) =>
-                    student.name == newStudent.name &&
-                    student.age == newStudent.age
-            )
-            return alreadyExist
+        const openModal = () => {
+            state.showModal = true
         }
 
         return {
@@ -163,8 +152,8 @@ export default defineComponent({
             onAddStudent,
             onEditStudent,
             opentEditForm,
-            onResetForm,
-            state
+            state,
+            openModal
         }
     },
 })

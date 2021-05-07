@@ -47,13 +47,18 @@ import {
     reactive,
 } from 'vue'
 import { Path, TranslateResult } from 'vue-i18n'
-import useVuelidate from '@vuelidate/core'
+import useVuelidate, { ValidationRuleWithParams } from '@vuelidate/core'
 import { required, email, helpers } from '@vuelidate/validators'
 import { IKeyValue } from '../../models/interfaces/key-value.interface'
     
 export interface LoginFormComponentFormProperties {
     password: string
     email: string
+}
+        
+export interface ValiduetorMessages {
+    required?: ValidationRuleWithParams<IKeyValue, unknown>
+    email?: ValidationRuleWithParams<IKeyValue, unknown>
 }
 
 interface LoginFormComponentDataState {
@@ -73,9 +78,10 @@ export default defineComponent({
                 email: '',
             },
         })
-        
+
+
         // Datas
-        const validatorMessages = reactive({
+        const validatorMessages: ValiduetorMessages = reactive({
             required: helpers.withMessage(() => labels.value.validators.required, required),
             email: helpers.withMessage(() => labels.value.validators.email, email),
         })
@@ -105,7 +111,7 @@ export default defineComponent({
         })
 
         // Datas
-        const v$ = useVuelidate(rules.value, state.form as IKeyValue)
+        const v$ = useVuelidate(rules.value as IKeyValue, state.form as IKeyValue)
 
         // Methods
         function onSubmitForm() {
@@ -117,6 +123,7 @@ export default defineComponent({
             labels,
             v$,
             onSubmitForm,
+            validatorMessages
         }
     },
 })
