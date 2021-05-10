@@ -7,34 +7,11 @@
             :destroy-on-close="true"
         >
             <UserFormComponent 
-                v-model:formIsValid="formIsValid" 
-                v-model:form="state.form"
-                :resetForm="resetForm"
-                @update:resetForm="setResetForm(false)"
+                :user="user"
+                @submit-form="submitForm"
             >
             </UserFormComponent>
-            <template #footer>
-                <span class="dialog-footer">
-                    <el-button
-                        :disabled="!formIsValid"
-                        :class="{ active: formIsValid, disabled: !formIsValid }"
-                        native-type="submit"
-                        type="primary"
-                        @click="submitForm()"
-                    >
-                        {{ $t('GENERAL.SUBMIT') }}
-                    </el-button>
-                    <el-button
-                        :disabled="!formIsValid"
-                        native-type="button"
-                        type="primary"
-                        plain
-                        @click="setResetForm(true)"
-                    >
-                        {{ $t('GENERAL.RESET') }}
-                    </el-button>
-                </span>
-            </template>
+
         </el-dialog>
     </div>
 </template>
@@ -46,17 +23,15 @@ import { Student, User } from '../models'
 
 interface UserFormModalComponentDataState {
     formLabelWidth: string
-    form: UserForm,
-    isEditMode: boolean
 }
 interface UserFormModalComponentProps {
     title: string,
-    user: Student,
+    user: User,
     showModal: boolean,
 }
 interface UserFormModalComponentEmits {
     emit: (
-        event: "addUserChange"|"editUserChange"|"update:showModal"|"update:formIsValid",
+        event: "submitForm"|"update:showModal",
         ...args: any[]
     ) => void
 }
@@ -71,7 +46,7 @@ export default {
             default: 'STUDENT_FORM.TITLE',
         },
         user: {
-            type: Object as PropType<Student>,
+            type: Object as PropType<User>,
             default: null,
         },
         showModal: {
@@ -80,41 +55,24 @@ export default {
         },
     },
     emits: [
-        'addUserChange',
-        'editUserChange',
+        'submitForm',
         'update:showModal',
-        'update:formIsValid'
     ],
     setup(props: Readonly<UserFormModalComponentProps>, { emit }: UserFormModalComponentEmits) {
         // Props 
-        const { user, showModal } = toRefs(props)
+        const { showModal } = toRefs(props)
 
         // Datas 
         const dialogFormVisible = ref(false)
-        const formIsValid = ref(false)
-        const resetForm = ref(false)
 
         // State 
         const state: UserFormModalComponentDataState = reactive({
             formLabelWidth: '120px',
-            form: { name: '', firstName: '', age: 0 },
-            isEditMode: false,
         })
 
         // Watchers 
-        watch(user, function (val: User) {
-            state.form = {
-                name: val.name,
-                firstName: val.firstName,
-                age: val.age,
-            }
-            state.isEditMode = !!val
-        })
 
         watch(showModal, function (val: boolean) {
-            if (!val) {
-                clearForm()
-            }
             dialogFormVisible.value = val
         })
 
@@ -122,48 +80,10 @@ export default {
             emit('update:showModal', val)
         })
 
-        watch(formIsValid, function (val) {
-            emit("update:formIsValid", val)
-        })
-
-        // Methods: User
-        const addUser = () => {
-            emit('addUserChange', getFormValue())
-        }
-        const editUser = () => {
-            emit('editUserChange', getFormValue())
-        }
-
         // Methods: Form
-        const getFormValue = () => {
-            const formValue = {
-                ...props.user,
-                ...state.form,
-            }
-            formValue.name.toString().trim()
-            formValue.firstName.toString().trim()
-            return formValue
-        }
-
-        const setResetForm = (value: boolean) => {
-            resetForm.value = value
-        }
-
-        const submitForm = () => {
-            if (formIsValid.value) {
-                if (!state.isEditMode) {
-                    addUser()
-                } else if (state.isEditMode) {
-                    editUser()
-                }
-                closeModal()
-            }
-        }
-
-        const clearForm = () => {
-            state.form.name = ''
-            state.form.firstName = ''
-            state.form.age = 0
+        const submitForm = (formValue: User) => {
+            emit('submitForm', formValue)
+            closeModal()
         }
 
         // Methods: Modal
@@ -173,11 +93,8 @@ export default {
 
         return {
             submitForm,
-            formIsValid,
-            resetForm,
             state,
             dialogFormVisible,
-            setResetForm,
         }
     },
 }

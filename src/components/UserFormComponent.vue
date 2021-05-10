@@ -1,7 +1,11 @@
 <template>
     <div>
         <el-form>
-            <el-form-item :label="labels.name" :label-width="state.formLabelWidth" required>
+            <el-form-item
+                :label="labels.name"
+                :label-width="state.formLabelWidth"
+                required
+            >
                 <el-input
                     type="text"
                     v-model="state.userForm.name"
@@ -10,13 +14,21 @@
                     clearable
                 />
                 <template v-if="v$.name.$errors">
-                    <div v-for="error in v$.name.$errors" :key="error.$uid" class="el-form-item__error pl-1">
+                    <div
+                        v-for="error in v$.name.$errors"
+                        :key="error.$uid"
+                        class="el-form-item__error pl-1"
+                    >
                         {{ error?.$message }}
                     </div>
                 </template>
             </el-form-item>
 
-            <el-form-item :label="labels.firstName" :label-width="state.formLabelWidth" required>
+            <el-form-item
+                :label="labels.firstName"
+                :label-width="state.formLabelWidth"
+                required
+            >
                 <el-input
                     type="text"
                     v-model="state.userForm.firstName"
@@ -25,13 +37,21 @@
                     clearable
                 />
                 <template v-if="v$.firstName.$errors">
-                    <div v-for="error in v$.firstName.$errors" :key="error.$uid" class="el-form-item__error pl-1">
+                    <div
+                        v-for="error in v$.firstName.$errors"
+                        :key="error.$uid"
+                        class="el-form-item__error pl-1"
+                    >
                         {{ error?.$message }}
                     </div>
                 </template>
             </el-form-item>
 
-            <el-form-item :label="labels.age" :label-width="state.formLabelWidth" required>
+            <el-form-item
+                :label="labels.age"
+                :label-width="state.formLabelWidth"
+                required
+            >
                 <el-input-number
                     v-model.number="state.userForm.age"
                     :min="0"
@@ -42,22 +62,54 @@
                 >
                 </el-input-number>
                 <template v-if="v$.age.$errors">
-                    <div v-for="error in v$.age.$errors" :key="error.$uid" class="el-form-item__error pl-1">
+                    <div
+                        v-for="error in v$.age.$errors"
+                        :key="error.$uid"
+                        class="el-form-item__error pl-1"
+                    >
                         {{ error?.$message }}
                     </div>
                 </template>
             </el-form-item>
         </el-form>
+        <div class="r-flex-end mt-4 mr-2">
+            <el-button
+                :disabled="v$.$invalid"
+                native-type="submit"
+                type="primary"
+                @click="submitForm()"
+            >
+                {{ $t('GENERAL.SUBMIT') }}
+            </el-button>
+            <el-button
+                :disabled="v$.$invalid"
+                native-type="button"
+                type="primary"
+                plain
+                @click="setResetForm()"
+            >
+                {{ $t('GENERAL.RESET') }}
+            </el-button>
+        </div>
     </div>
 </template>
 
 <script lang="ts">
-import { toRefs, watch, onMounted, reactive, computed, inject, PropType } from 'vue'
+import {
+    toRefs,
+    watch,
+    onMounted,
+    reactive,
+    computed,
+    inject,
+    PropType,
+} from 'vue'
 import { Path, TranslateResult } from 'vue-i18n'
 import { ValiduetorMessages } from '@/components/login/LoginFormComponent.vue'
 import useVuelidate from '@vuelidate/core'
 import { IKeyValue } from '../models/interfaces/key-value.interface'
 import { helpers, required } from '@vuelidate/validators'
+import { User } from '../models'
 
 export interface UserForm {
     name: string
@@ -66,53 +118,56 @@ export interface UserForm {
 }
 
 interface UserFormComponentDataState {
-    userForm: UserForm,
-    formLabelWidth: string,
+    userForm: UserForm
+    formLabelWidth: string
 }
 
 interface UserFormComponentProps {
-    form: UserForm,
-    resetForm: boolean
+    user: User
 }
 
 interface UserFormComponentEmits {
-    emit: (event: "update:form"|"update:formIsValid"|"update:resetForm", ...args: any[]) => void
+    emit: (event: 'submitForm', ...args: any[]) => void
 }
 
 export default {
     props: {
-        form: {
-            type: Object as PropType<UserForm>,
+        user: {
+            type: Object as PropType<User>,
             default: null,
-        },
-        resetForm: {
-            type: Boolean, 
-            default: false
         }
     },
-    emits: ['update:form', 'update:formIsValid', 'update:resetForm'],
-    setup(props: Readonly<UserFormComponentProps>, { emit }: UserFormComponentEmits) {
+    emits: ['submitForm'],
+    setup(
+        props: Readonly<UserFormComponentProps>,
+        { emit }: UserFormComponentEmits
+    ) {
         // Injects
-        const translate =  inject<(key: Path) => TranslateResult>('i18nTranslate')
+        const translate = inject<(key: Path) => TranslateResult>(
+            'i18nTranslate'
+        )
 
         // Props
-        const { form, resetForm } = toRefs(props)
+        const { user } = toRefs(props)
 
         // State
         const state: UserFormComponentDataState = reactive({
             userForm: {
                 name: '',
-                firstName: '', 
-                age: 0
+                firstName: '',
+                age: 0,
             },
             formLabelWidth: '120px',
         })
 
         // Datas
         const validatorMessages: ValiduetorMessages = reactive({
-            required: helpers.withMessage(() => labels.value.validators.required, required),
+            required: helpers.withMessage(
+                () => labels.value.validators.required,
+                required
+            ),
         })
-        
+
         // Computed Properties
         const labels = computed(() => {
             return {
@@ -121,65 +176,82 @@ export default {
                 age: translate!('USER_LIST.COLUMNS.AGE'),
                 validators: {
                     required: translate!('VALIDATOR.REQUIRED'),
-                }
+                },
             }
         })
 
         const rules = computed(() => {
             return {
                 name: {
-                    required: validatorMessages.required
+                    required: validatorMessages.required,
                 },
-                firstName: { 
+                firstName: {
                     required: validatorMessages.required,
                 },
                 age: {
-                    required: validatorMessages.required
-                }
+                    required: validatorMessages.required,
+                },
             }
         })
 
         // Datas
-        const v$ = useVuelidate(rules.value as IKeyValue, state.userForm as IKeyValue)
+        const v$ = useVuelidate(
+            rules.value as IKeyValue,
+            state.userForm as IKeyValue
+        )
 
         // LifeCycle Hooks
         onMounted(() => {
-            if (!form.value || (form.value && (!form.value.name || !form.value.firstName ))) {
+            if (
+                !user.value ||
+                (user.value && (!user.value.name || !user.value.firstName))
+            ) {
                 return
-            } 
-            const { name, firstName, age } = form.value
+            }
+            const { name, firstName, age } = user.value
             state.userForm.name = name
             state.userForm.firstName = firstName
             state.userForm.age = age
         })
 
         // Watchers
-        watch(form, function (val: UserForm) {
+        watch(user, function (val: User) {
             state.userForm = val
         })
 
-        watch(state.userForm, function (val: UserForm) {
-            emit('update:form', val)
-        })
-
-        watch(v$, function (val)  {
-            emit('update:formIsValid', !val.$invalid)
-        })
-
-        watch(resetForm, function(val) {
-            if (val) {
-                state.userForm.name = ''
-                state.userForm.firstName = ''
-                state.userForm.age = 0
-                v$.value.$reset()
-                emit('update:resetForm')
+        // Methods
+        const submitForm = () => {
+            if (!v$.value.$invalid) {
+                emit('submitForm', new User({ 
+                    id: user.value.id ? user.value.id : undefined, 
+                    name: state.userForm.name,
+                    firstName: state.userForm.firstName,
+                    age: state.userForm.age,
+                }))
             }
-        })
+        }
+
+        const setResetForm = () => {
+            state.userForm.name = ''
+            state.userForm.firstName = ''
+            state.userForm.age = 0
+            v$.value.$reset()
+        }
+
         return {
             state,
             labels,
-            v$
+            v$,
+            submitForm,
+            setResetForm,
         }
     },
 }
 </script>
+<style lang="scss">
+@import '@/assets/style.scss';
+
+.modal__footer {
+    text-align: right;
+}
+</style>

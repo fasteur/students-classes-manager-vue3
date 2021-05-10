@@ -11,16 +11,14 @@
             :user="state.student"
             :title="state.formTitle"
             :showModal="state.showModal"
-            v-model:formIsValid="state.formIsValid"
-            @addUserChange="onAddStudent($event)"
-            @editUserChange="onEditStudent($event)"
+            @submit-form="onSubmitForm($event)"
             v-model:showModal="state.showModal"
         >
         </UserFormModalComponent>
 
         <UserListComponent
             :user-list="state.studentList"
-            @editUserChanges="opentEditForm($event)"
+            @editUserChanges="openEditForm($event)"
             @deleteUserChanges="onDeleteStudent($event)"
         >
         </UserListComponent>
@@ -31,7 +29,7 @@
 import { defineComponent, onMounted, inject, reactive } from 'vue'
 import UserFormModalComponent from '@/components/UserFormModalComponent.vue'
 import UserListComponent from '@/components/UserListComponent.vue'
-import { Student } from '../models/index'
+import { Student, User } from '../models/index'
 import { UserDto } from '../models/interfaces/dto/user-dto.interface'
 import { StudentService } from '../services/student.service'
 
@@ -40,7 +38,6 @@ interface HomeDataState {
     student: Student
     formTitle: string
     showModal: boolean,
-    formIsValid: boolean
 }
 export default defineComponent({
     components: {
@@ -57,7 +54,6 @@ export default defineComponent({
             student: new Student({}),
             formTitle: 'STUDENT_FORM.TITLE',
             showModal: false,
-            formIsValid: false
         })
 
         // LifeCycle Hooks
@@ -118,20 +114,18 @@ export default defineComponent({
         }
 
         // Student form actions
-        const onAddStudent = (newStudent: Student): void => {
-            if (!state.formIsValid) return
-            addStudent(newStudent)
-        }
-
-        const onEditStudent = (newStudent: Student): void => {
-            if (!state.formIsValid) return
-            editStudent(newStudent)
+        const onSubmitForm = (newStudent: User): void => {
+            if (isOnEditMode(newStudent)) {
+                editStudent(newStudent)
+            } else {
+                addStudent(newStudent)
+            }
         }
 
         /**
          * @description set student data & open form modal
          */
-        const opentEditForm = (studentToEdit: Student): void => {
+        const openEditForm = (studentToEdit: Student): void => {
             state.student = new Student({ ...studentToEdit })
             state.showModal = true
         }
@@ -140,12 +134,14 @@ export default defineComponent({
             state.showModal = true
         }
 
+        const isOnEditMode = (student: Student) => {
+            return student && student.id
+        }
+        
         return {
             onDeleteStudent,
-            editStudent,
-            onAddStudent,
-            onEditStudent,
-            opentEditForm,
+            onSubmitForm,
+            openEditForm,
             state,
             openModal
         }
