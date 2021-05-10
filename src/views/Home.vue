@@ -10,9 +10,9 @@
         <UserFormModalComponent
             :user="state.student"
             :title="state.formTitle"
-            :showModal="state.showModal"
+            :showModal="showModal"
             @submit-form="onSubmitForm($event)"
-            v-model:showModal="state.showModal"
+            v-model:showModal="showModal"
         >
         </UserFormModalComponent>
 
@@ -26,7 +26,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, inject, reactive } from 'vue'
+import { defineComponent, onMounted, inject, reactive, watch, ref } from 'vue'
 import UserFormModalComponent from '@/components/UserFormModalComponent.vue'
 import UserListComponent from '@/components/UserListComponent.vue'
 import { Student, User } from '../models/index'
@@ -37,7 +37,6 @@ interface HomeDataState {
     studentList: Student[]
     student: Student
     formTitle: string
-    showModal: boolean,
 }
 export default defineComponent({
     components: {
@@ -53,11 +52,18 @@ export default defineComponent({
             studentList: [] as Student[],
             student: new Student({}),
             formTitle: 'STUDENT_FORM.TITLE',
-            showModal: false,
         })
+
+        const showModal = ref(false)
 
         // LifeCycle Hooks
         onMounted(() => getStudents())
+
+        watch(showModal, function (val, oldVal) {
+            if (oldVal && !val) {
+                resetStudent()
+            }
+        })
         
         // Methods
         const addStudent = (data: Student): void => {
@@ -93,7 +99,7 @@ export default defineComponent({
                 .editStudent(studentToEdit)
                 .then(() => {
                     getStudents()
-                    state.student = new Student({})
+                    resetStudent()
                 })
                 .catch((err) => console.log('err: ', err))
         }
@@ -127,15 +133,17 @@ export default defineComponent({
          */
         const openEditForm = (studentToEdit: Student): void => {
             state.student = new Student({ ...studentToEdit })
-            state.showModal = true
+            showModal.value = true
         }
 
         const openModal = () => {
-            state.showModal = true
+            showModal.value = true
         }
 
-        const isOnEditMode = (student: Student) => {
-            return student && student.id
+        const isOnEditMode = (student: Student) => student && student.id
+
+        const resetStudent = () => {
+            state.student = new Student({})
         }
         
         return {
@@ -143,7 +151,8 @@ export default defineComponent({
             onSubmitForm,
             openEditForm,
             state,
-            openModal
+            openModal,
+            showModal
         }
     },
 })

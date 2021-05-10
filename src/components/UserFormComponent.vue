@@ -86,7 +86,7 @@
                 native-type="button"
                 type="primary"
                 plain
-                @click="setResetForm()"
+                @click="clearForm()"
             >
                 {{ $t('GENERAL.RESET') }}
             </el-button>
@@ -103,6 +103,7 @@ import {
     computed,
     inject,
     PropType,
+    onUnmounted,
 } from 'vue'
 import { Path, TranslateResult } from 'vue-i18n'
 import { ValiduetorMessages } from '@/components/login/LoginFormComponent.vue'
@@ -231,7 +232,7 @@ export default {
             }
         }
 
-        const setResetForm = () => {
+        const clearForm = () => {
             state.userForm.name = ''
             state.userForm.firstName = ''
             state.userForm.age = 0
@@ -243,7 +244,7 @@ export default {
             labels,
             v$,
             submitForm,
-            setResetForm,
+            clearForm,
         }
     },
 }
