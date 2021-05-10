@@ -203,21 +203,16 @@ export default {
 
         // LifeCycle Hooks
         onMounted(() => {
-            if (
-                !user.value ||
-                (user.value && (!user.value.name || !user.value.firstName))
-            ) {
-                return
+            if (user && user.value && user.value.id) {
+                state.userForm = user.value
             }
-            const { name, firstName, age } = user.value
-            state.userForm.name = name
-            state.userForm.firstName = firstName
-            state.userForm.age = age
         })
 
         // Watchers
         watch(user, function (val: User) {
-            state.userForm = val
+            if (val && val.id) {
+                state.userForm = val
+            }
         })
 
         // Methods
