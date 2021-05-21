@@ -1,5 +1,4 @@
 import axios from 'axios'
-import i18n from '@/i18n'
 export const myAxios = axios.create({
     baseURL: 'https://http-vue-3f9db-default-rtdb.firebaseio.com/',
 })
