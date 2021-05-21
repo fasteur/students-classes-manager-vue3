@@ -5,8 +5,9 @@
             class="float-right mr-3"
             type="primary"
             @click="openModal()"
-            >{{ $t('GENERAL.ADD') }}</el-button
         >
+            {{ $t('GENERAL.ADD') }}
+        </el-button>
         <UserFormModalComponent
             :user="state.student"
             :title="state.formTitle"
@@ -60,6 +61,7 @@ export default defineComponent({
         onMounted(() => getStudents())
 
         watch(showModal, function (val, oldVal) {
+
             if (oldVal && !val) {
                 resetStudent()
             }
