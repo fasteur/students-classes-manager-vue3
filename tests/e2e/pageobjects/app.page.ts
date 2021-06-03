@@ -1,17 +1,17 @@
 class App {
-  /**
-   * elements
-   */
-  get heading() {
-    return $("h1");
-  }
+    /**
+     * elements
+     */
+    get heading() {
+        return $('h1')
+    }
 
-  /**
-   * methods
-   */
-  open(path = "/") {
-    browser.url(path);
-  }
+    /**
+     * methods
+     */
+    open(path = '/') {
+        browser.url(path)
+    }
 }
 
-export default new App();
+export default new App()
